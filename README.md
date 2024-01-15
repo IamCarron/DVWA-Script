@@ -39,6 +39,5 @@ Este script automatiza la instalación de Damn Vulnerable Web Application (DVWA)
 ## Licencia
 
 Este script está bajo la licencia [MIT](LICENSE).
-```
 
 Asegúrate de ajustar la URL de descarga, las instrucciones y otros detalles según sea necesario. Además, si hay alguna dependencia o requisito adicional que los usuarios deben tener antes de ejecutar el script, asegúrate de mencionarlo en la sección "Requisitos".
