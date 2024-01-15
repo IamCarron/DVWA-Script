@@ -1,5 +1,3 @@
-Aquí hay un ejemplo de un archivo README básico para tu script. Este README proporcionará a los usuarios una breve descripción del script y las instrucciones básicas para su ejecución.
-
 # Instalación de DVWA en Kali Linux
 
 Este script automatiza la instalación de Damn Vulnerable Web Application (DVWA) en Kali Linux, configurando el entorno web, la base de datos MySQL y la aplicación DVWA.
