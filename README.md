@@ -20,13 +20,13 @@ Este script automatiza la instalación de Damn Vulnerable Web Application (DVWA)
 
 2. Otorga permisos de ejecución al script:
 
-   ```bash
+   ```
    chmod +x install_dvwa.sh
    ```
 
 3. Ejecuta el script con privilegios de superusuario:
 
-   ```bash
+   ```
    sudo ./install_dvwa.sh
    ```
 
