@@ -14,7 +14,7 @@ Este script automatiza la instalación de Damn Vulnerable Web Application (DVWA)
 1. Descarga el script de instalación:
 
    ```bash
-   wget https://github.com/IamCarron/DVW-Script/blob/main/Install-DVWA.sh
+   wget https://github.com/IamCarron/DVWA-Script/blob/main/Install-DVWA.sh
    ```
 
 2. Otorga permisos de ejecución al script:
