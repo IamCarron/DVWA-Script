@@ -78,7 +78,7 @@ check_program git
 
 download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "\e[96mDescargando DVWA desde GitHub...\e[0m")
 echo -e "$download_message"
-git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
+git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA > /dev/null 2>&1
 sleep 2
 
 mysql_start_message=$(get_language_message "\e[96mStarting MySQL...\e[0m" "\e[96mIniciando MySQL...\e[0m")
