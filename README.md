@@ -17,7 +17,7 @@
 
 ## Descripción 📋
 
-Este script automatiza el proceso de instalación de [DVWA (Damn Vulnerable Web Application)](https://github.com/ethicalhack3r/DVWA), una aplicación web diseñada intencionalmente para ser vulnerable a varios ataques. DVWA es una herramienta para aprender y practicar seguridad de aplicaciones web.
+Este script automatiza el proceso de instalación de [DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA), una aplicación web diseñada intencionalmente para ser vulnerable a varios ataques. DVWA es una herramienta para aprender y practicar seguridad de aplicaciones web.
 
 ## Características ✨
 
@@ -28,7 +28,7 @@ Este script automatiza el proceso de instalación de [DVWA (Damn Vulnerable Web 
 
 ## Description 📖
 
-This script automates the installation process for [DVWA (Damn Vulnerable Web Application)](https://github.com/ethicalhack3r/DVWA), a web application intentionally designed to be vulnerable to various attacks. DVWA is a tool for learning and practicing web application security.
+This script automates the installation process for [DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA), a web application intentionally designed to be vulnerable to various attacks. DVWA is a tool for learning and practicing web application security.
 
 ## Features ✨
 
