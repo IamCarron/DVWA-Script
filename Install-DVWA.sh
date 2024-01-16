@@ -41,7 +41,7 @@ echo
 # Function to display instructions in English
 show_english_instructions() {
 	echo -e "\e[96mUpdating repositories...\e[0m"
-	apt update
+	apt update > /dev/null 2>&1
 	clear
     
 	echo -e "\e[96mVerifying and installing necessary dependencies...\e[0m"
@@ -105,7 +105,9 @@ show_english_instructions() {
     echo -e "\e[92mCredentials after setup:\e[0m"
 	echo -e "Username: \033[93madmin\033[0m"
 	echo -e "Password: \033[93mpassword\033[0m"
-
+  echo
+  echo
+  echo -e "\033[91mWith ♡ by Iamcarron"
 }
 # Function to display instructions in Spanish
 show_spanish_instructions() {
@@ -177,6 +179,9 @@ show_spanish_instructions() {
 	echo -e "\e[92mCredenciales después de la configuración:\e[0m"
 	echo -e "Usuario: \033[93madmin\033[0m"
 	echo -e "Contraseña: \033[93mpassword\033[0m"
+  echo
+  echo
+  echo -e "\033[91mCon ♡ by Iamcarron"
 }
 
 # Verify the language and execute the corresponding instructions
