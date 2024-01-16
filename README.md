@@ -1,4 +1,4 @@
-# DVWA Installer 🚀
+# DVWA Installer
 
 ![DVWA Logo](https://raw.githubusercontent.com/ethicalhack3r/DVWA/master/dvwa/images/logo.png)
 
