@@ -1,8 +1,8 @@
-# DVWA Installer
+# DVWA Installer 🚀
 
 ![DVWA Logo](https://raw.githubusercontent.com/ethicalhack3r/DVWA/master/dvwa/images/logo.png)
 
-## Table of Contents
+## Table of Contents 📚
 - [Description](#description)
 - [Features](#features)
 - [Installation](#installation)
@@ -15,29 +15,29 @@
 
 ---
 
-## Descripción
+## Descripción 📋
 
 Este script automatiza el proceso de instalación de [DVWA (Damn Vulnerable Web Application)](https://github.com/ethicalhack3r/DVWA), una aplicación web diseñada intencionalmente para ser vulnerable a varios ataques. DVWA es una herramienta para aprender y practicar seguridad de aplicaciones web.
 
-## Características
+## Características ✨
 
 - Instalación automatizada de DVWA con las dependencias necesarias.
 - Soporte para los idiomas inglés y español.
 
 ---
 
-## Description
+## Description 📖
 
 This script automates the installation process for [DVWA (Damn Vulnerable Web Application)](https://github.com/ethicalhack3r/DVWA), a web application intentionally designed to be vulnerable to various attacks. DVWA is a tool for learning and practicing web application security.
 
-## Features
+## Features ✨
 
 - Automated installation of DVWA with necessary dependencies.
 - Supports both English and Spanish languages.
 
 ---
 
-## Installation / Instalación
+## Installation / Instalación 🛠️
 
 ### Installation Steps / Pasos de Instalación
 
@@ -73,7 +73,7 @@ This script automates the installation process for [DVWA (Damn Vulnerable Web Ap
 
 ---
 
-## Usage / Uso
+## Usage / Uso 🚀
 
 Follow the on-screen instructions to install DVWA. The script will guide you through the process, including updating repositories, installing dependencies, and configuring the DVWA database.
 
@@ -81,7 +81,7 @@ Sigue las instrucciones en pantalla para instalar DVWA. El script te guiará a t
 
 ---
 
-## Credentials / Credenciales
+## Credentials / Credenciales 🔐
 
 After setup, use the following credentials:
 
@@ -99,7 +99,7 @@ Para el primer uso, se proporcionan credenciales adicionales:
 
 ---
 
-## Language Support / Soporte de Idiomas
+## Language Support / Soporte de Idiomas 🌐
 
 The script supports both English and Spanish languages. It automatically detects the system language and provides instructions accordingly.
 
@@ -107,7 +107,7 @@ El script admite los idiomas inglés y español. Detecta automáticamente el idi
 
 ---
 
-## Contributing / Contribuciones
+## Contributing / Contribuciones 🤝
 
 Contributions are welcome! If you encounter any issues or have suggestions for improvement, please create a pull request or open an issue in the [GitHub repository](https://github.com/IamCarron/DVWA-Script).
 
@@ -115,7 +115,7 @@ Contributions are welcome! If you encounter any issues or have suggestions for i
 
 ---
 
-## License / Licencia
+## License / Licencia 📄
 
 This project is licensed under the [MIT License](LICENSE).
 
