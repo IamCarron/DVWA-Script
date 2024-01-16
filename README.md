@@ -53,22 +53,22 @@ This script automates the installation process for [DVWA (Damn Vulnerable Web Ap
 
 2. Make the script executable:
    ```bash
-   chmod +x dvwa_installer.sh
+   chmod +x Install-DVWA.sh
    ```
 
 2. Haz el script ejecutable:
    ```bash
-   chmod +x dvwa_installer.sh
+   chmod +x Install-DVWA.sh
    ```
 
 3. Run the script as root:
    ```bash
-   sudo ./dvwa_installer.sh
+   sudo ./Install-DVWA.sh
    ```
 
 3. Ejecuta el script como root:
    ```bash
-   sudo ./dvwa_installer.sh
+   sudo ./Install-DVWA.sh
    ```
 
 ---
