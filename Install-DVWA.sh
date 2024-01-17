@@ -21,10 +21,10 @@ fi
 
 # Function to verify the existence of a program
 check_program() {
-    if ! command -v "$1" &>/dev/null; then
+    if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
         message=$(get_language_message "\033[91m$1 is not installed. Installing it now..." "\033[91m$1 no está instalado. Instalándolo ahora...")
         echo -e >&2 "$message"
-        apt install -y "$1" > /dev/null 2>&1
+        apt install -y "$1" 2>/dev/null
     else
         success_message=$(get_language_message "\033[92m$1 is installed!\033[0m" "\033[92m$1 !Está instalado!\033[0m")
         echo -e "$success_message"
@@ -33,7 +33,15 @@ check_program() {
 
 # MySQL root password prompt function
 get_mysql_root_password() {
-    read -s -p "$(get_language_message "Enter MySQL root password: " "Ingrese la contraseña de root de MySQL: ")" mysql_root_password
+    read -s -p "$(get_language_message "Enter MySQL root password (press Enter for no password): " "Ingrese la contraseña de root de MySQL (presione Enter para ninguna contraseña): ")" mysql_root_password
+
+    # Verificar si la contraseña está vacía
+    if [ -z "$mysql_root_password" ]; then
+        echo -e "\n$(get_language_message "No password provided." "No se proporcionó contraseña.")"
+    else
+        echo -e "\n$(get_language_message "Password provided." "Contraseña proporcionada.")"
+    fi
+
     echo -e "$mysql_root_password"
 }
 
@@ -54,17 +62,16 @@ echo -e "\033[96m\033[1m
   ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝                                                                        
 \033[0m"
 
-# Welcome message
 welcome_message=$(get_language_message "\033[96mWelcome to the DVWA installer!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
 echo -e "$welcome_message"
-echo
 
+echo
 # Start of the installer
 
 # Update the repositories
 update_message=$(get_language_message "\e[96mUpdating repositories...\e[0m" "\e[96mActualizando repositorios...\e[0m")
 echo -e "$update_message"
-apt update > /dev/null 2>&1
+apt update 2>/dev/null
 
 # Chek if the dependencies are installed
 dependencies_message=$(get_language_message "\e[96mVerifying and installing necessary dependencies...\e[0m" "\e[96mVerificando e instalando dependencias necesarias...\e[0m")
@@ -79,9 +86,10 @@ check_program php-gd
 check_program libapache2-mod-php
 check_program git
 
+# Download the repo
 download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "\e[96mDescargando DVWA desde GitHub...\e[0m")
 echo -e "$download_message"
-git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA > /dev/null 2>&1
+git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA 2>/dev/null
 sleep 2
 
 # Start MySql
@@ -94,10 +102,10 @@ sleep 2
 mysql_root_password=$(get_mysql_root_password)
 
 # Run MySQL commands
-mysql -u root -p$mysql_root_password -e "CREATE DATABASE IF NOT EXISTS dvwa;"
-mysql -u root -p$mysql_root_password -e "CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';"
-mysql -u root -p$mysql_root_password -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost';"
-mysql -u root -p$mysql_root_password -e "FLUSH PRIVILEGES;"
+mysql -u root -p"$mysql_root_password" -e "CREATE DATABASE IF NOT EXISTS dvwa;"
+mysql -u root -p"$mysql_root_password" -e "CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';"
+mysql -u root -p"$mysql_root_password" -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost';"
+mysql -u root -p"$mysql_root_password" -e "FLUSH PRIVILEGES;"
 echo
 
 # Success message
@@ -106,6 +114,7 @@ echo -e "$success_message"
 
 sleep 2
 
+# Coping DVWA folder to /var/www/html
 dvwa_config_message=$(get_language_message "\e[96mConfiguring DVWA...\e[0m" "\e[96mConfigurando DVWA...\e[0m")
 echo -e "$dvwa_config_message"
 cp /var/www/html/DVWA/config/config.inc.php.dist /var/www/html/DVWA/config/config.inc.php
@@ -120,7 +129,6 @@ sleep 2
 
 php_config_message=$(get_language_message "\e[96mConfiguring PHP...\e[0m" "\e[96mConfigurando PHP...\e[0m")
 echo -e "$php_config_message"
-
 # Trying to find the php.ini file in the Apache folder
 php_config_file_apache="/etc/php/$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')/apache2/php.ini"
 
@@ -154,17 +162,11 @@ echo -e "$apache_restart_message"
 systemctl restart apache2
 sleep 2
 
-# Show to user the credentials for first use
-credentials_message=$(get_language_message "\e[92mUsername and password for the first use:\e[0m" "\e[92mUsuario y contraseña para el primer uso:\e[0m")
-echo -e "$credentials_message"
-echo -e "Username: \033[93mdvwa\033[0m"
-echo -e "Password: \033[93mp@ssw0rd\033[0m"
-
 success_message=$(get_language_message "\e[92mDVWA has been installed successfully. Access \e[93mhttp://localhost/DVWA\e[0m \e[92mto get started." "\e[92mDVWA se ha instalado correctamente. Accede a \e[93mhttp://localhost/DVWA\e[0m \e[92mpara comenzar.")
 echo -e "$success_message"
 
 #Show to user the credentials after setup
-credentials_after_setup_message=$(get_language_message "\e[92mCredentials after setup:\e[0m" "\e[92mCredenciales después de la configuración:\e[0m")
+credentials_after_setup_message=$(get_language_message "\e[92mCredentials:\e[0m" "\e[92mCredenciales:\e[0m")
 echo -e "$credentials_after_setup_message"
 echo -e "Username: \033[93madmin\033[0m"
 echo -e "Password: \033[93mpassword\033[0m"
