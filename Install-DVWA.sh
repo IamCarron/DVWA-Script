@@ -3,7 +3,7 @@
 # Get language prefix
 lang_prefix="${LANG:0:2}"
 
-# Function to check the language and display the corresponding message
+# Function for verifying the language and displaying the corresponding message
 get_language_message() {
     if [[ $lang_prefix -eq "es" ]]; then
         echo -e "$1"
@@ -36,6 +36,7 @@ get_mysql_root_password() {
     read -s -p "$(get_language_message "Enter MySQL root password: " "Ingrese la contraseña de root de MySQL: ")" mysql_root_password
     echo -e "$mysql_root_password"
 }
+
 # ASCII Art
 echo -e "\033[96m\033[1m
                   ██████╗ ██╗   ██╗██╗    ██╗ █████╗                    
@@ -52,16 +53,20 @@ echo -e "\033[96m\033[1m
   ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
   ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝                                                                        
 \033[0m"
+
 # Welcome message
 welcome_message=$(get_language_message "\033[96mWelcome to the DVWA installer!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
 echo -e "$welcome_message"
-
 echo
+
 # Start of the installer
+
+# Update the repositories
 update_message=$(get_language_message "\e[96mUpdating repositories...\e[0m" "\e[96mActualizando repositorios...\e[0m")
 echo -e "$update_message"
 apt update > /dev/null 2>&1
 
+# Chek if the dependencies are installed
 dependencies_message=$(get_language_message "\e[96mVerifying and installing necessary dependencies...\e[0m" "\e[96mVerificando e instalando dependencias necesarias...\e[0m")
 echo -e "$dependencies_message"
 
@@ -79,6 +84,7 @@ echo -e "$download_message"
 git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA > /dev/null 2>&1
 sleep 2
 
+# Start MySql
 mysql_start_message=$(get_language_message "\e[96mStarting MySQL...\e[0m" "\e[96mIniciando MySQL...\e[0m")
 echo -e "$mysql_start_message"
 systemctl start mysql.service
@@ -87,13 +93,14 @@ sleep 2
 # User Prompt for the MySQL root password
 mysql_root_password=$(get_mysql_root_password)
 
-# Execute MySQL commands
+# Run MySQL commands
 mysql -u root -p$mysql_root_password -e "CREATE DATABASE IF NOT EXISTS dvwa;"
 mysql -u root -p$mysql_root_password -e "CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';"
 mysql -u root -p$mysql_root_password -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost';"
 mysql -u root -p$mysql_root_password -e "FLUSH PRIVILEGES;"
 echo
-# Success Message
+
+# Success message
 success_message=$(get_language_message "\e[92mMySQL commands executed successfully.\e[0m" "\e[92mComandos MySQL ejecutados correctamente.\e[0m")
 echo -e "$success_message"
 
@@ -104,6 +111,7 @@ echo -e "$dvwa_config_message"
 cp /var/www/html/DVWA/config/config.inc.php.dist /var/www/html/DVWA/config/config.inc.php
 sleep 2
 
+# Assign the right permissions to DVWA
 permissions_config_message=$(get_language_message "\e[96mConfiguring permissions...\e[0m" "\e[96mConfigurando permisos...\e[0m")
 echo -e "$permissions_config_message"
 chown -R www-data:www-data /var/www/html/DVWA
@@ -112,6 +120,7 @@ sleep 2
 
 php_config_message=$(get_language_message "\e[96mConfiguring PHP...\e[0m" "\e[96mConfigurando PHP...\e[0m")
 echo -e "$php_config_message"
+
 # Trying to find the php.ini file in the Apache folder
 php_config_file_apache="/etc/php/$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')/apache2/php.ini"
 
@@ -138,12 +147,14 @@ else
     echo -e "$php_file_message"
 fi
 sleep 2
+
 # Apache restart
 apache_restart_message=$(get_language_message "\e[96mRestarting Apache...\e[0m" "\e[96mReiniciando Apache...\e[0m")
 echo -e "$apache_restart_message"
 systemctl restart apache2
 sleep 2
-# First time use credentials
+
+# Show to user the credentials for first use
 credentials_message=$(get_language_message "\e[92mUsername and password for the first use:\e[0m" "\e[92mUsuario y contraseña para el primer uso:\e[0m")
 echo -e "$credentials_message"
 echo -e "Username: \033[93mdvwa\033[0m"
@@ -151,11 +162,13 @@ echo -e "Password: \033[93mp@ssw0rd\033[0m"
 
 success_message=$(get_language_message "\e[92mDVWA has been installed successfully. Access \e[93mhttp://localhost/DVWA\e[0m \e[92mto get started." "\e[92mDVWA se ha instalado correctamente. Accede a \e[93mhttp://localhost/DVWA\e[0m \e[92mpara comenzar.")
 echo -e "$success_message"
-#After setup credentials
+
+#Show to user the credentials after setup
 credentials_after_setup_message=$(get_language_message "\e[92mCredentials after setup:\e[0m" "\e[92mCredenciales después de la configuración:\e[0m")
 echo -e "$credentials_after_setup_message"
 echo -e "Username: \033[93madmin\033[0m"
 echo -e "Password: \033[93mpassword\033[0m"
+
 # End of the installer
 echo
 final_message=$(get_language_message "\033[91mWith ♡ by IamCarron" "\033[91mCon ♡ by IamCarron")
