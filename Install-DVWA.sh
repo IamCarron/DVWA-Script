@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Get language prefix
+# Obtener prefijo de idioma
 lang_prefix="${LANG:0:2}"
 
-# Function for verifying the language and displaying the corresponding message
+# Función para verificar el idioma y mostrar el mensaje correspondiente
 get_language_message() {
     if [[ $lang_prefix -eq "es" ]]; then
         echo -e "$1"
@@ -12,40 +12,56 @@ get_language_message() {
     fi
 }
 
-# Check if the user is root
+# Comprueba si el usuario es root
 if [ "$EUID" -ne 0 ]; then
     error_message=$(get_language_message "\e[91mThis script must be run by the root user.\e[0m" "\e[91mEste script debe ejecutarse como usuario root.\e[0m")
     echo -e "$error_message"
     exit 1
 fi
 
-# Function to verify the existence of a program
+# Función para verificar la existencia de un programa
 check_program() {
     if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
         message=$(get_language_message "\033[91m$1 is not installed. Installing it now..." "\033[91m$1 no está instalado. Instalándolo ahora...")
         echo -e >&2 "$message"
-        apt install -y "$1" 2>/dev/null
+        apt install -y "$1" &>/dev/null
     else
         success_message=$(get_language_message "\033[92m$1 is installed!\033[0m" "\033[92m$1 !Está instalado!\033[0m")
         echo -e "$success_message"
     fi
 }
 
-# MySQL root password prompt function
-get_mysql_root_password() {
-    read -s -p "$(get_language_message "Enter MySQL root password (press Enter for no password): " "Ingrese la contraseña de root de MySQL (presione Enter para ninguna contraseña): ")" mysql_root_password
+run_mysql_commands() {
+    local mysql_user
+    local mysql_password
 
-    # Verificar si la contraseña está vacía
-    if [ -z "$mysql_root_password" ]; then
-        echo -e "\n$(get_language_message "No password provided." "No se proporcionó contraseña.")"
+    read -p "$(get_language_message "\e[96mEnter MySQL user:\e[0m " "\e[96mIngrese el usuario de MySQL:\e[0m ")" mysql_user
+    read -s -p "$(get_language_message "\e[96mEnter MySQL password (press Enter for no password):\e[96m " "\e[96mIngrese la contraseña de MySQL (presiona Enter si no hay contraseña):\e[0m ")" mysql_password
+    echo -e "\n$(get_language_message "\e[96mCredentials provided.\e[0m" "\e[96mCredenciales proporcionadas.\e[0m")"
+
+    # Comprobar si se proporcionó una contraseña
+    if [ -n "$mysql_password" ]; then
+        # Ejecutar comandos MySQL con contraseña
+        mysql -u "$mysql_user" -p"$mysql_password" -e "CREATE DATABASE IF NOT EXISTS dvwa;" &>/dev/null &&
+        mysql -u "$mysql_user" -p"$mysql_password" -e "CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';" &>/dev/null &&
+        mysql -u "$mysql_user" -p"$mysql_password" -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost';" &>/dev/null &&
+        mysql -u "$mysql_user" -p"$mysql_password" -e "FLUSH PRIVILEGES;" &>/dev/null
     else
-        echo -e "\n$(get_language_message "Password provided." "Contraseña proporcionada.")"
+        # Ejecutar comandos MySQL sin contraseña
+        mysql -u "$mysql_user" -e "CREATE DATABASE IF NOT EXISTS dvwa;" &>/dev/null &&
+        mysql -u "$mysql_user" -e "CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';" &>/dev/null &&
+        mysql -u "$mysql_user" -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost';" &>/dev/null &&
+        mysql -u "$mysql_user" -e "FLUSH PRIVILEGES;" &>/dev/null
     fi
 
-    echo -e "$mysql_root_password"
+    if [ $? -eq 0 ]; then
+        echo "$(get_language_message "\033[92mMySQL commands executed successfully.\033[0m" "\033[92mComandos MySQL ejecutados con éxito.\033[0m")"
+    else
+        echo -e "$(get_language_message "\033[91mError: Unable to execute MySQL commands. Please check your MySQL credentials." "\033[91mError: No se pueden ejecutar los comandos de MySQL. Por favor, verifique sus credenciales de MySQL.")"
+    fi
 }
 
-# ASCII Art
+# Arte ASCII
 echo -e "\033[96m\033[1m
                   ██████╗ ██╗   ██╗██╗    ██╗ █████╗                    
                   ██╔══██╗██║   ██║██║    ██║██╔══██╗                   
@@ -66,14 +82,14 @@ welcome_message=$(get_language_message "\033[96mWelcome to the DVWA installer!\0
 echo -e "$welcome_message"
 
 echo
-# Start of the installer
+# Inicio del instalador
 
-# Update the repositories
+# Actualizar los repositorios
 update_message=$(get_language_message "\e[96mUpdating repositories...\e[0m" "\e[96mActualizando repositorios...\e[0m")
 echo -e "$update_message"
-apt update 2>/dev/null
+apt update &>/dev/null
 
-# Chek if the dependencies are installed
+# Comprueba si las dependencias están instaladas
 dependencies_message=$(get_language_message "\e[96mVerifying and installing necessary dependencies...\e[0m" "\e[96mVerificando e instalando dependencias necesarias...\e[0m")
 echo -e "$dependencies_message"
 
@@ -81,36 +97,25 @@ check_program apache2
 check_program mariadb-server
 check_program mariadb-client
 check_program php
-check_program php-mysqli
+check_program php-mysql
 check_program php-gd
 check_program libapache2-mod-php
 check_program git
 
-# Download the repo
+# Descargar el repositorio
 download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "\e[96mDescargando DVWA desde GitHub...\e[0m")
 echo -e "$download_message"
-git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA 2>/dev/null
+git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA &>/dev/null
 sleep 2
 
-# Start MySql
+# Iniciar MySql
 mysql_start_message=$(get_language_message "\e[96mStarting MySQL...\e[0m" "\e[96mIniciando MySQL...\e[0m")
 echo -e "$mysql_start_message"
 systemctl start mysql.service
 sleep 2
 
-# User Prompt for the MySQL root password
-mysql_root_password=$(get_mysql_root_password)
-
-# Run MySQL commands
-mysql -u root -p"$mysql_root_password" -e "CREATE DATABASE IF NOT EXISTS dvwa;"
-mysql -u root -p"$mysql_root_password" -e "CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';"
-mysql -u root -p"$mysql_root_password" -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost';"
-mysql -u root -p"$mysql_root_password" -e "FLUSH PRIVILEGES;"
-echo
-
-# Success message
-success_message=$(get_language_message "\e[92mMySQL commands executed successfully.\e[0m" "\e[92mComandos MySQL ejecutados correctamente.\e[0m")
-echo -e "$success_message"
+# Llama a la función
+run_mysql_commands
 
 sleep 2
 
@@ -120,7 +125,7 @@ echo -e "$dvwa_config_message"
 cp /var/www/html/DVWA/config/config.inc.php.dist /var/www/html/DVWA/config/config.inc.php
 sleep 2
 
-# Assign the right permissions to DVWA
+# Asignar los permisos adecuados a DVWA
 permissions_config_message=$(get_language_message "\e[96mConfiguring permissions...\e[0m" "\e[96mConfigurando permisos...\e[0m")
 echo -e "$permissions_config_message"
 chown -R www-data:www-data /var/www/html/DVWA
@@ -129,20 +134,20 @@ sleep 2
 
 php_config_message=$(get_language_message "\e[96mConfiguring PHP...\e[0m" "\e[96mConfigurando PHP...\e[0m")
 echo -e "$php_config_message"
-# Trying to find the php.ini file in the Apache folder
+# Intentando encontrar el archivo php.ini en la carpeta Apache
 php_config_file_apache="/etc/php/$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')/apache2/php.ini"
 
-# Trying to find the php.ini file in the FPM folder
+# Intentando encontrar el archivo php.ini en la carpeta FPM
 php_config_file_fpm="/etc/php/$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')/fpm/php.ini"
 
-# Check if the php.ini file exists in the Apache folder and use it if it is present.
+# Comprueba si el archivo php.ini existe en la carpeta de Apache y úsalo si está presente.
 if [ -f "$php_config_file_apache" ]; then
     php_config_file="$php_config_file_apache"
     sed -i 's/^\(allow_url_include =\).*/\1 on/' $php_config_file
     sed -i 's/^\(allow_url_fopen =\).*/\1 on/' $php_config_file
     sed -i 's/^\(display_errors =\).*/\1 on/' $php_config_file
     sed -i 's/^\(display_startup_errors =\).*/\1 on/' $php_config_file
-# Check if the php.ini file exists in the FPM folder and use it if it is present.
+# Comprueba si el archivo php.ini existe en la carpeta FPM y úsalo si está presente.
 elif [ -f "$php_config_file_fpm" ]; then
     php_config_file="$php_config_file_fpm"
     sed -i 's/^\(allow_url_include =\).*/\1 on/' $php_config_file
@@ -150,7 +155,7 @@ elif [ -f "$php_config_file_fpm" ]; then
     sed -i 's/^\(display_errors =\).*/\1 on/' $php_config_file
     sed -i 's/^\(display_startup_errors =\).*/\1 on/' $php_config_file
 else
-    # Warning message if not found in any of the folders
+    # Mensaje de advertencia si no se encuentra en ninguna de las carpetas
     php_file_message=$(get_language_message "\e[91mWarning: PHP configuration file not found in Apache or FPM folders.\e[0m" "\e[91mAdvertencia: No se encuentra el fichero de configuración PHP en las carpetas de Apache o FPM.\e[0m")
     echo -e "$php_file_message"
 fi
@@ -165,13 +170,13 @@ sleep 2
 success_message=$(get_language_message "\e[92mDVWA has been installed successfully. Access \e[93mhttp://localhost/DVWA\e[0m \e[92mto get started." "\e[92mDVWA se ha instalado correctamente. Accede a \e[93mhttp://localhost/DVWA\e[0m \e[92mpara comenzar.")
 echo -e "$success_message"
 
-#Show to user the credentials after setup
+#Mostrar al usuario las credenciales después de la configuración
 credentials_after_setup_message=$(get_language_message "\e[92mCredentials:\e[0m" "\e[92mCredenciales:\e[0m")
 echo -e "$credentials_after_setup_message"
 echo -e "Username: \033[93madmin\033[0m"
 echo -e "Password: \033[93mpassword\033[0m"
 
-# End of the installer
+# Fin del instalador
 echo
 final_message=$(get_language_message "\033[91mWith ♡ by IamCarron" "\033[91mCon ♡ by IamCarron")
 echo -e "$final_message"
