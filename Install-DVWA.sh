@@ -19,10 +19,32 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Arte ASCII
+echo -e "\033[96m\033[1m
+                  ██████╗ ██╗   ██╗██╗    ██╗ █████╗                    
+                  ██╔══██╗██║   ██║██║    ██║██╔══██╗                   
+                  ██║  ██║██║   ██║██║ █╗ ██║███████║                   
+                  ██║  ██║╚██╗ ██╔╝██║███╗██║██╔══██║                   
+                  ██████╔╝ ╚████╔╝ ╚███╔███╔╝██║  ██║                   
+                  ╚═════╝   ╚═══╝   ╚══╝╚══╝ ╚═╝  ╚═╝                   
+                                                                        
+  ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗ 
+  ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔════╝██╔══██╗
+  ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
+  ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██╔══██╗
+  ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
+  ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝                                                                        
+\033[0m"
+
+welcome_message=$(get_language_message "\033[96mWelcome to the DVWA installer!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
+echo -e "$welcome_message"
+
+echo
+
 # Función para verificar la existencia de un programa
 check_program() {
     if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
-        message=$(get_language_message "\033[91m$1 is not installed. Installing it now..." "\033[91m$1 no está instalado. Instalándolo ahora...")
+        message=$(get_language_message "\033[91m$1 is not installed. Installing it now...\e[0m" "\033[91m$1 no está instalado. Instalándolo ahora...\e[0m")
         echo -e >&2 "$message"
         apt install -y "$1"
     else
@@ -35,18 +57,21 @@ run_mysql_commands() {
     local mysql_user
     local mysql_password
 
-    echo -e "\n$(get_language_message "\e[96mDefault credentials:\e[0m" "\e[96mCredenciales por defecto:\e[0m")"
-    echo -e "Username: \033[93mroot\033[0m"
-    echo -e "\n$(get_language_message "Password: \033[93m[No password just hit Enter]\033[0m" "Password: \033[93m[Sin contraseña solo presiona Enter.]\033[0m")"
-    read -p "$(get_language_message "\e[96mEnter MySQL user:\e[0m " "\e[96mIngrese el usuario de MySQL:\e[0m ")" mysql_user
-    read -s -p "$(get_language_message "\e[96mEnter MySQL password (press Enter for no password):\e[96m " "\e[96mIngrese la contraseña de MySQL (presiona Enter si no hay contraseña):\e[0m ")" mysql_password
-    echo -e "\n$(get_language_message "\e[96mCredentials provided.\e[0m" "\e[96mCredenciales proporcionadas.\e[0m")"
+    while true; do
+        echo -e "\n$(get_language_message "\e[96mDefault credentials:\e[0m" "\e[96mCredenciales por defecto:\e[0m")"
+        echo -e "Username: \033[93mroot\033[0m"
+        echo -e "\n$(get_language_message "Password: \033[93m[No password just hit Enter]\033[0m" "Password: \033[93m[Sin contraseña solo presiona Enter.]\033[0m")"
+        read -p "$(get_language_message "\e[96mEnter MySQL user:\e[0m " "\e[96mIngrese el usuario de MySQL:\e[0m ")" mysql_user
+        read -s -p "$(get_language_message "\e[96mEnter MySQL password (press Enter for no password):\e[96m " "\e[96mIngrese la contraseña de MySQL (presiona Enter si no hay contraseña):\e[0m ")" mysql_password
+        echo -e "\n$(get_language_message "\e[96mCredentials provided.\e[0m" "\e[96mCredenciales proporcionadas.\e[0m")"
 
-    # Verificar si las credenciales son válidas antes de ejecutar comandos MySQL
-    if ! mysql -u "$mysql_user" -p"$mysql_password" -e ";" &>/dev/null; then
-        echo -e "\e[91mError: Invalid MySQL credentials. Please check your username and password.\e[0m"
-        exit 1
-    fi
+        # Verificar si las credenciales son válidas antes de ejecutar comandos MySQL
+        if ! mysql -u "$mysql_user" -p"$mysql_password" -e ";" &>/dev/null; then
+            echo -e "\e[91mError: Invalid MySQL credentials. Please check your username and password.\e[0m"
+        else
+            break
+        fi
+    done
 
     # Ejecutar comandos MySQL
     mysql_commands_output=$(mysql_commands "$mysql_user" "$mysql_password")
@@ -77,27 +102,6 @@ mysql_commands() {
     echo $?
 }
 
-# Arte ASCII
-echo -e "\033[96m\033[1m
-                  ██████╗ ██╗   ██╗██╗    ██╗ █████╗                    
-                  ██╔══██╗██║   ██║██║    ██║██╔══██╗                   
-                  ██║  ██║██║   ██║██║ █╗ ██║███████║                   
-                  ██║  ██║╚██╗ ██╔╝██║███╗██║██╔══██║                   
-                  ██████╔╝ ╚████╔╝ ╚███╔███╔╝██║  ██║                   
-                  ╚═════╝   ╚═══╝   ╚══╝╚══╝ ╚═╝  ╚═╝                   
-                                                                        
-  ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗ 
-  ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔════╝██╔══██╗
-  ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
-  ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██╔══██╗
-  ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
-  ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝                                                                        
-\033[0m"
-
-welcome_message=$(get_language_message "\033[96mWelcome to the DVWA installer!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
-echo -e "$welcome_message"
-
-echo
 # Inicio del instalador
 
 # Actualizar los repositorios
