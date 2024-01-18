@@ -83,20 +83,13 @@ Sigue las instrucciones en pantalla para instalar DVWA. El script te guiará a t
 
 ## Credentials / Credenciales 🔐
 
-After setup, use the following credentials:
+After install, use the following credentials:
 
-Después de la configuración, utiliza las siguientes credenciales:
+Después de la instalación, utiliza las siguientes credenciales:
 
 - **Username:** `admin`
 - **Password:** `password`
-
-For the first use, additional credentials are provided:
-
-Para el primer uso, se proporcionan credenciales adicionales:
-
-- **Username:** `dvwa`
-- **Password:** `abc123`
-
+  
 ---
 
 ## Language Support / Soporte de Idiomas 🌐
