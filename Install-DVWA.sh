@@ -110,10 +110,11 @@ check_program git
 # Comprobando si la carpeta ya existe
 if [ -d "/var/www/html/DVWA" ]; then
     # La carpeta ya existe
-    echo -e "\e[91m¡Atención!\e[0m La carpeta DVWA ya está creada."
+    warning_message=$(get_language_message "\e[91m¡Atención! La carpeta DVWA ya está creada.\e[0m" "\e[91mAttention! The DVWA folder is already created.\e[0m")
+    echo -e "$warning_message"
 
     # Preguntar al usuario qué acción tomar
-    read -p "¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n): " user_response
+    read -p "$(get_language_message "\e[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n): \e[0m " "\e[96mDo you want to delete the existing folder and download it again (y/n): \e[0m ")" user_response
 
     if [ "$user_response" == "s" ]; then
         # Borrar la carpeta existente
@@ -126,10 +127,12 @@ if [ -d "/var/www/html/DVWA" ]; then
         sleep 2
     elif [ "$user_response" == "n" ]; then
         # El usuario elige no descargar
-        echo "Continuando sin descargar DVWA."
+        no_download_message=$(get_language_message "\e[96mContinuando sin descargar DVWA.\e[0m" "\e[96mContinuing without downloading DVWA.\e[0m")
+        echo -e "$no_download_message"
     else
         # Respuesta inválida
-        echo -e "\e[91m¡Error!\e[0m Respuesta no válida. Saliendo del script."
+        invalid_message=$(et_language_message "\e[91m¡Error! Respuesta no válida. Saliendo del script.\e[0m" "\e[91mError! Invalid response. Exiting the script.\e[0m")
+        echo -e "$invalid_message"
         exit 1
     fi
 else
