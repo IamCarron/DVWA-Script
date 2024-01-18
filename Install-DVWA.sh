@@ -73,14 +73,22 @@ run_mysql_commands() {
         fi
     done
 
-    # Ejecutar comandos MySQL
-    mysql_commands_output=$(mysql_commands "$mysql_user" "$mysql_password")
+    local success=false
+    while [ "$success" != true ]; do
+        # Ejecutar comandos MySQL
+        mysql_commands_output=$(mysql_commands "$mysql_user" "$mysql_password")
 
-    if [ $? -eq 0 ]; then
-        echo -e "$(get_language_message "\033[92mMySQL commands executed successfully.\033[0m" "\033[92mComandos MySQL ejecutados con éxito.\033[0m")"
-    else
-        echo -e "$(get_language_message "\033[91mError: Unable to execute MySQL commands. $mysql_commands_output" "\033[91mError: No se pueden ejecutar los comandos de MySQL. $mysql_commands_output")"
-    fi
+        if [ $? -eq 0 ]; then
+            echo -e "$(get_language_message "\033[92mMySQL commands executed successfully.\033[0m" "\033[92mComandos MySQL ejecutados con éxito.\033[0m")"
+            success=true
+        else
+            echo -e "$(get_language_message "\033[91mError: Unable to execute MySQL commands. $mysql_commands_output" "\033[91mError: No se pueden ejecutar los comandos de MySQL. $mysql_commands_output")"
+            read -p "$(get_language_message "\e[96mDo you want to retry? (yes/no):\e[0m " "\e[96m¿Quieres intentarlo de nuevo? (sí/no):\e[0m ")" choice
+            if [ "$choice" != "yes" ]; then
+                break
+            fi
+        fi
+    done
 }
 
 mysql_commands() {
