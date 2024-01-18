@@ -105,11 +105,40 @@ check_program php-gd
 check_program libapache2-mod-php
 check_program git
 
-# Descargar el repositorio
-download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "\e[96mDescargando DVWA desde GitHub...\e[0m")
-echo -e "$download_message"
-git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
-sleep 2
+# Descargar el repositorio DVWA desde GitHub
+
+# Comprobando si la carpeta ya existe
+if [ -d "/var/www/html/DVWA" ]; then
+    # La carpeta ya existe
+    echo -e "\e[91m¡Atención!\e[0m La carpeta DVWA ya está creada."
+
+    # Preguntar al usuario qué acción tomar
+    read -p "¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n): " user_response
+
+    if [ "$user_response" == "s" ]; then
+        # Borrar la carpeta existente
+        rm -rf /var/www/html/DVWA
+
+        # Descargar DVWA desde GitHub
+        download_message=$(get_language_message "\e[96mDescargando DVWA desde GitHub...\e[0m" "\e[96mDownloading DVWA from GitHub...\e[0m")
+        echo -e "$download_message"
+        git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
+        sleep 2
+    elif [ "$user_response" == "n" ]; then
+        # El usuario elige no descargar
+        echo "Continuando sin descargar DVWA."
+    else
+        # Respuesta inválida
+        echo -e "\e[91m¡Error!\e[0m Respuesta no válida. Saliendo del script."
+        exit 1
+    fi
+else
+    # La carpeta no existe, descargar DVWA desde GitHub
+    download_message=$(get_language_message "\e[96mDescargando DVWA desde GitHub...\e[0m" "\e[96mDownloading DVWA from GitHub...\e[0m")
+    echo -e "$download_message"
+    git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
+    sleep 2
+fi
 
 # Iniciar MySql
 mysql_start_message=$(get_language_message "\e[96mStarting MySQL...\e[0m" "\e[96mIniciando MySQL...\e[0m")
