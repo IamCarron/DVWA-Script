@@ -24,7 +24,7 @@ check_program() {
     if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
         message=$(get_language_message "\033[91m$1 is not installed. Installing it now..." "\033[91m$1 no está instalado. Instalándolo ahora...")
         echo -e >&2 "$message"
-        apt install -y "$1" &>/dev/null
+        apt install -y "$1"
     else
         success_message=$(get_language_message "\033[92m$1 is installed!\033[0m" "\033[92m$1 !Está instalado!\033[0m")
         echo -e "$success_message"
@@ -34,7 +34,10 @@ check_program() {
 run_mysql_commands() {
     local mysql_user
     local mysql_password
-
+    
+    echo -e "\n$(get_language_message "\e[96mDefault credentials:.\e[0m" "\e[96mCredenciales por defecto:\e[0m")"
+    echo -e "Username: \033[93mroot\033[0m"
+    echo -e "\n$(get_language_message "Password: \033[93m[No password just hit Enter]\033[0m" "Password: \033[93m[Sin contraseña solo presiona Enter.]\033[0m")"
     read -p "$(get_language_message "\e[96mEnter MySQL user:\e[0m " "\e[96mIngrese el usuario de MySQL:\e[0m ")" mysql_user
     read -s -p "$(get_language_message "\e[96mEnter MySQL password (press Enter for no password):\e[96m " "\e[96mIngrese la contraseña de MySQL (presiona Enter si no hay contraseña):\e[0m ")" mysql_password
     echo -e "\n$(get_language_message "\e[96mCredentials provided.\e[0m" "\e[96mCredenciales proporcionadas.\e[0m")"
@@ -87,7 +90,7 @@ echo
 # Actualizar los repositorios
 update_message=$(get_language_message "\e[96mUpdating repositories...\e[0m" "\e[96mActualizando repositorios...\e[0m")
 echo -e "$update_message"
-apt update &>/dev/null
+apt update
 
 # Comprueba si las dependencias están instaladas
 dependencies_message=$(get_language_message "\e[96mVerifying and installing necessary dependencies...\e[0m" "\e[96mVerificando e instalando dependencias necesarias...\e[0m")
@@ -105,7 +108,7 @@ check_program git
 # Descargar el repositorio
 download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "\e[96mDescargando DVWA desde GitHub...\e[0m")
 echo -e "$download_message"
-git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA &>/dev/null
+git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
 sleep 2
 
 # Iniciar MySql
