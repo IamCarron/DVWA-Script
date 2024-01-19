@@ -92,49 +92,31 @@ run_mysql_commands() {
 mysql_commands() {
     local mysql_user="$1"
     local mysql_password="$2"
-    local mysql_command="mysql -u '$mysql_user'"
+    local mysql_command="mysql -u$mysql_user"
 
     if [ -n "$mysql_password" ]; then
-        mysql_command+=" -p'$mysql_password'"
+        mysql_command+=" -p$mysql_password"
     fi
 
-    # Verificar si la base de datos y el usuario ya existen / Verify if the database and user already exist
-    if $mysql_command -e "SHOW DATABASES LIKE 'dvwa';" | grep -q 'dvwa'; then
-        # Cambiar temporalmente el descriptor de entrada estándar / Temporarily change the standard input descriptor
-        exec 3<&0
-        read -p "$(get_language_message "\e[96mDatabase 'dvwa' already exists. Do you want to recreate it? (yes/no):\e[96m " "\e[96mLa base de datos 'dvwa' ya existe. ¿Desea volver a crearla? (sí/no):\e[0m ")" recreate_choice <&3
-        exec 3<&-
-        if [ "$recreate_choice" = "yes" ]; then
-            # Eliminar la base de datos existente y recrearla / Delete the existing database and recreate it
-            $mysql_command -e "DROP DATABASE IF EXISTS dvwa;" &>/dev/null &&
-            $mysql_command -e "CREATE DATABASE dvwa;" &>/dev/null ||
-            { echo -e "$(get_language_message "\033[91mAn error occurred while creating the DVWA database." "\033[91mSe ha producido un error al crear la base de datos DVWA.")"; return 1; }
-        else
-            return 1  # Indicar que hay un error (no se recreó la base de datos) / Indicate that there is an error (the database has not been recreated).
-        fi
+    # Verificar si la base de datos ya existe
+    if ! $mysql_command -e "CREATE DATABASE IF NOT EXISTS dvwa;"; then
+        echo -e "$(get_language_message "\033[91mAn error occurred while creating the DVWA database." "\033[91mSe ha producido un error al crear la base de datos DVWA.")"
+        return 1
     fi
 
-    # Verificar si el usuario ya existe / Check if the user already exists
-    if $mysql_command -e "SELECT user FROM mysql.user WHERE user='dvwa';" | grep -q 'dvwa'; then
-        # Cambiar temporalmente el descriptor de entrada estándar / Temporarily change the standard input descriptor
-        exec 3<&0
-        read -p "$(get_language_message "\n\e[96mMySQL user 'dvwa' already exists. Do you want to recreate it? (yes/no):\e[96m " "\n\e[96mEl usuario de MySQL 'dvwa' ya existe. ¿Desea volver a crearlo? (sí/no):\e[0m ")" recreate_user_choice <&3
-        exec 3<&-
-        if [ "$recreate_user_choice" = "yes" ]; then
-            # Eliminar el usuario existente y recrearlo / Delete the existing user and recreate it
-            $mysql_command -e "DROP USER IF EXISTS 'dvwa'@'localhost';" &>/dev/null &&
-            $mysql_command -e "CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';" &>/dev/null ||
-            { echo -e "$(get_language_message "\033[91mAn error occurred while creating the DVWA user." "\033[91mSe ha producido un error al crear el usuario DVWA.")"; return 1; }
-        else
-            return 1  # Indicar que hay un error (no se recreó el usuario) / Indicate error (user was not recreated)
-        fi
+    # Verificar si el usuario ya existe
+    if ! $mysql_command -e "CREATE USER IF NOT EXISTS 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';"; then
+        echo -e "$(get_language_message "\033[91mAn error occurred while creating the DVWA user." "\033[91mSe ha producido un error al crear el usuario DVWA.")"
+        return 1
     fi
 
-    # Ejecutar comandos MySQL para asignar privilegios / Executing MySQL commands to assign privileges
-    $mysql_command -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost';" &>/dev/null &&
-    $mysql_command -e "FLUSH PRIVILEGES;" &>/dev/null
+    # Asignar privilegios al usuario
+    if ! $mysql_command -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost'; FLUSH PRIVILEGES;"; then
+        echo -e "$(get_language_message "\033[91mAn error occurred while granting privileges." "\033[91mSe ha producido un error al otorgar privilegios.")"
+        return 1
+    fi
 
-    echo $?
+    echo 0
 }
 
 # Inicio del instalador / Installer startup
