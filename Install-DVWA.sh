@@ -33,14 +33,15 @@ echo -e "\033[96m\033[1m
   ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
   ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██╔══██╗
   ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
-  ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝                                                                        
+  ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝     
 \033[0m"
 
 welcome_message=$(get_language_message "\033[96mWelcome to the DVWA installer!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
 echo -e "$welcome_message"
-
+echo -e "\n$(get_language_message "\033[92mScript Name: Install-DVWA.sh\033[0m" "\033[92mNombre del Script: Install-DVWA.sh\033[0m")"
+echo -e "\n$(get_language_message "\033[92mAuthor: IamCarron\033[0m" "\033[92mAutor: IamCarron\033[0m")"
+echo -e "\n$(get_language_message "\033[92mGithub Repository: https://github.com/IamCarron/DVWA-Script\033[0m" "\033[92mRepositorio de Github: https://github.com/IamCarron/DVWA-Script\033[0m")"
 echo
-
 # Función para verificar la existencia de un programa
 check_program() {
     if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
@@ -63,10 +64,10 @@ run_mysql_commands() {
         echo -e "\n$(get_language_message "Password: \033[93m[No password just hit Enter]\033[0m" "Password: \033[93m[Sin contraseña solo presiona Enter.]\033[0m")"
         read -p "$(get_language_message "\e[96mEnter MySQL user:\e[0m " "\e[96mIngrese el usuario de MySQL:\e[0m ")" mysql_user
         read -s -p "$(get_language_message "\e[96mEnter MySQL password (press Enter for no password):\e[96m " "\e[96mIngrese la contraseña de MySQL (presiona Enter si no hay contraseña):\e[0m ")" mysql_password
-
+        echo
         # Verificar si las credenciales son válidas antes de ejecutar comandos MySQL
         if ! mysql -u "$mysql_user" -p"$mysql_password" -e ";" &>/dev/null; then
-            echo -e "\e[91mError: Invalid MySQL credentials. Please check your username and password.\e[0m"
+            echo -e "\n$(get_language_message "\e[91mError: Invalid MySQL credentials. Please check your username and password.\e[0m" "\e[91mError: Credenciales MySQL inválidas. Por favor, compruebe su nombre de usuario y contraseña.")"
         else
             break
         fi
@@ -81,9 +82,7 @@ run_mysql_commands() {
             echo -e "$(get_language_message "\033[92mMySQL commands executed successfully.\033[0m" "\033[92mComandos MySQL ejecutados con éxito.\033[0m")"
             success=true
         else
-            echo -e "$(get_language_message "\033[91mError: Unable to execute MySQL commands. $mysql_commands_output" "\033[91mError: No se pueden ejecutar los comandos de MySQL. $mysql_commands_output")"
-            read -p "$(get_language_message "\e[96mDo you want to retry? (yes/no):\e[0m " "\e[96m¿Quieres intentarlo de nuevo? (sí/no):\e[0m ")" choice
-            if [ "$choice" != "yes" ]; then
+            if [ "$recreate_choice" != "no" ]; then
                 break
             fi
         fi
@@ -93,16 +92,45 @@ run_mysql_commands() {
 mysql_commands() {
     local mysql_user="$1"
     local mysql_password="$2"
-
-    # Ejecutar comandos MySQL con o sin contraseña
-    mysql_command="mysql -u '$mysql_user'"
+    local mysql_command="mysql -u '$mysql_user'"
 
     if [ -n "$mysql_password" ]; then
         mysql_command+=" -p'$mysql_password'"
     fi
 
-    $mysql_command -e "CREATE DATABASE IF NOT EXISTS dvwa;" &>/dev/null &&
-    $mysql_command -e "CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';" &>/dev/null &&
+    # Verificar si la base de datos y el usuario ya existen
+    if $mysql_command -e "SHOW DATABASES LIKE 'dvwa';" | grep -q 'dvwa'; then
+        # Cambiar temporalmente el descriptor de entrada estándar
+        exec 3<&0
+        read -p "$(get_language_message "\e[96mDatabase 'dvwa' already exists. Do you want to recreate it? (yes/no):\e[96m " "\e[96mLa base de datos 'dvwa' ya existe. ¿Desea volver a crearla? (sí/no):\e[0m ")" recreate_choice <&3
+        exec 3<&-
+        if [ "$recreate_choice" = "yes" ]; then
+            # Eliminar la base de datos existente y recrearla
+            $mysql_command -e "DROP DATABASE IF EXISTS dvwa;" &>/dev/null &&
+            $mysql_command -e "CREATE DATABASE dvwa;" &>/dev/null ||
+            { echo -e "$(get_language_message "\033[91mAn error occurred while creating the DVWA database." "\033[91mSe ha producido un error al crear la base de datos DVWA.")"; return 1; }
+        else
+            return 1  # Indicar que hay un error (no se recreó la base de datos)
+        fi
+    fi
+
+    # Verificar si el usuario ya existe
+    if $mysql_command -e "SELECT user FROM mysql.user WHERE user='dvwa';" | grep -q 'dvwa'; then
+        # Cambiar temporalmente el descriptor de entrada estándar
+        exec 3<&0
+        read -p "$(get_language_message "\n\e[96mMySQL user 'dvwa' already exists. Do you want to recreate it? (yes/no):\e[96m " "\n\e[96mEl usuario de MySQL 'dvwa' ya existe. ¿Desea volver a crearlo? (sí/no):\e[0m ")" recreate_user_choice <&3
+        exec 3<&-
+        if [ "$recreate_user_choice" = "yes" ]; then
+            # Eliminar el usuario existente y recrearlo
+            $mysql_command -e "DROP USER IF EXISTS 'dvwa'@'localhost';" &>/dev/null &&
+            $mysql_command -e "CREATE USER 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';" &>/dev/null ||
+            { echo -e "$(get_language_message "\033[91mAn error occurred while creating the DVWA user." "\033[91mSe ha producido un error al crear el usuario DVWA.")"; return 1; }
+        else
+            return 1  # Indicar que hay un error (no se recreó el usuario)
+        fi
+    fi
+
+    # Ejecutar comandos MySQL para asignar privilegios
     $mysql_command -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost';" &>/dev/null &&
     $mysql_command -e "FLUSH PRIVILEGES;" &>/dev/null
 
@@ -138,7 +166,7 @@ if [ -d "/var/www/html/DVWA" ]; then
     echo -e "$warning_message"
 
     # Preguntar al usuario qué acción tomar
-    read -p "$(get_language_message "\e[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n): \e[0m " "\e[96mDo you want to delete the existing folder and download it again (y/n): \e[0m ")" user_response
+    read -p "$(get_language_message "\e[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n):\e[0m " "\e[96mDo you want to delete the existing folder and download it again (y/n):\e[0m ")" user_response
 
     if [ "$user_response" == "s" ]; then
         # Borrar la carpeta existente
@@ -167,15 +195,20 @@ else
     sleep 2
 fi
 
-# Iniciar MySql
-mysql_start_message=$(get_language_message "\e[96mStarting MySQL...\e[0m" "\e[96mIniciando MySQL...\e[0m")
-echo -e "$mysql_start_message"
-systemctl start mysql.service
-sleep 2
+# Verificar si MySQL ya está iniciado
+if systemctl is-active --quiet mysql.service; then
+    mysql_already_started_message=$(get_language_message "\033[92mMySQL service is already running.\033[0m" "\033[92mEl servicio MySQL ya está en ejecución.\033[0m")
+    echo -e "$mysql_already_started_message"
+else
+    # Iniciar MySQL
+    mysql_start_message=$(get_language_message "\e[96mStarting MySQL...\e[0m" "\e[96mIniciando MySQL...\e[0m")
+    echo -e "$mysql_start_message"
+    systemctl start mysql.service
+    sleep 2
+fi
 
 # Llama a la función
 run_mysql_commands
-
 sleep 2
 
 # Coping DVWA folder to /var/www/html
