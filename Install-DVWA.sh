@@ -151,7 +151,7 @@ if [ -d "/var/www/html/DVWA" ]; then
     # Preguntar al usuario qué acción tomar / Ask the user what action to take
     read -p "$(get_language_message "\e[96mDo you want to delete the existing folder and download it again (y/n):\e[0m " "\e[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n):\e[0m ")" user_response
 
-    if [ "$user_response" == "s" ]; then
+    if [[ "$user_response" == "s" || "$user_response" == "y" ]]; then
         # Borrar la carpeta existente / Delete existing folder
         rm -rf /var/www/html/DVWA
 
