@@ -41,6 +41,7 @@ echo -e "$welcome_message"
 echo -e "\n$(get_language_message "\033[92mScript Name: Install-DVWA.sh\033[0m" "\033[92mNombre del Script: Install-DVWA.sh\033[0m")"
 echo -e "\n$(get_language_message "\033[92mAuthor: IamCarron\033[0m" "\033[92mAutor: IamCarron\033[0m")"
 echo -e "\n$(get_language_message "\033[92mGithub Repository: https://github.com/IamCarron/DVWA-Script\033[0m" "\033[92mRepositorio de Github: https://github.com/IamCarron/DVWA-Script\033[0m")"
+echo -e "\n$(get_language_message "\033[92mInstaller Version: 1.0.1\033[0m" "\033[92mVersión del instalador: 1.0.1\033[0m")"
 echo
 # Función para verificar la existencia de un programa / Function to verify the existence of a program
 check_program() {
