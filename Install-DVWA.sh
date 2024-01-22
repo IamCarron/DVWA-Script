@@ -41,7 +41,7 @@ echo -e "$welcome_message"
 echo -e "\n$(get_language_message "\033[92mScript Name: Install-DVWA.sh\033[0m" "\033[92mNombre del Script: Install-DVWA.sh\033[0m")"
 echo -e "\n$(get_language_message "\033[92mAuthor: IamCarron\033[0m" "\033[92mAutor: IamCarron\033[0m")"
 echo -e "\n$(get_language_message "\033[92mGithub Repository: https://github.com/IamCarron/DVWA-Script\033[0m" "\033[92mRepositorio de Github: https://github.com/IamCarron/DVWA-Script\033[0m")"
-echo -e "\n$(get_language_message "\033[92mInstaller Version: 1.0.1\033[0m" "\033[92mVersión del instalador: 1.0.1\033[0m")"
+echo -e "\n$(get_language_message "\033[92mInstaller Version: 1.0.2\033[0m" "\033[92mVersión del instalador: 1.0.2\033[0m")"
 echo
 # Función para verificar la existencia de un programa / Function to verify the existence of a program
 check_program() {
@@ -145,28 +145,28 @@ check_program git
 # Comprobando si la carpeta ya existe / Checking if the folder already exists
 if [ -d "/var/www/html/DVWA" ]; then
     # La carpeta ya existe / The folder already exists
-    warning_message=$(get_language_message "\e[91m¡Atención! La carpeta DVWA ya está creada.\e[0m" "\e[91mAttention! The DVWA folder is already created.\e[0m")
+    warning_message=$(get_language_message "\e[91mAttention! The DVWA folder is already created.\e[0m" "\e[91m¡Atención! La carpeta DVWA ya está creada.\e[0m")
     echo -e "$warning_message"
 
     # Preguntar al usuario qué acción tomar / Ask the user what action to take
-    read -p "$(get_language_message "\e[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n):\e[0m " "\e[96mDo you want to delete the existing folder and download it again (y/n):\e[0m ")" user_response
+    read -p "$(get_language_message "\e[96mDo you want to delete the existing folder and download it again (y/n):\e[0m " "\e[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n):\e[0m ")" user_response
 
     if [ "$user_response" == "s" ]; then
         # Borrar la carpeta existente / Delete existing folder
         rm -rf /var/www/html/DVWA
 
         # Descargar DVWA desde GitHub / Download DVWA from GitHub
-        download_message=$(get_language_message "\e[96mDescargando DVWA desde GitHub...\e[0m" "\e[96mDownloading DVWA from GitHub...\e[0m")
+        download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "\e[96mDescargando DVWA desde GitHub...\e[0m")
         echo -e "$download_message"
         git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
         sleep 2
     elif [ "$user_response" == "n" ]; then
         # El usuario elige no descargar / User chooses not to download
-        no_download_message=$(get_language_message "\e[96mContinuando sin descargar DVWA.\e[0m" "\e[96mContinuing without downloading DVWA.\e[0m")
+        no_download_message=$(get_language_message "\e[96mContinuing without downloading DVWA.\e[0m" "\e[96mContinuando sin descargar DVWA.\e[0m")
         echo -e "$no_download_message"
     else
         # Respuesta inválida / Invalid answer
-        invalid_message=$(et_language_message "\e[91m¡Error! Respuesta no válida. Saliendo del script.\e[0m" "\e[91mError! Invalid response. Exiting the script.\e[0m")
+        invalid_message=$(et_language_message "\e[91mError! Invalid response. Exiting the script.\e[0m" "\e[91m¡Error! Respuesta no válida. Saliendo del script.\e[0m")
         echo -e "$invalid_message"
         exit 1
     fi
