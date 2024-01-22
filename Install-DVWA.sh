@@ -236,9 +236,22 @@ else
 fi
 sleep 2
 
+# Verificar si Apache ya está habilitado / Check if Apache is already enabled
+if systemctl is-enabled apache2 >/dev/null 2>&1; then
+    apache_already_enabled_message=$(get_language_message "\033[92mApache service is already enabled.\033[0m" "\033[92mEl servicio Apache ya está en habilitado.\033[0m")
+    echo -e "$apache_already_enabled_message"
+else
+    # Habilita Apache / Habilita Apache
+    apache_enable_message=$(get_language_message "\e[96mEnabling Apache...\e[0m" "\e[96mHabilitando Apache...\e[0m")
+    echo -e "$apache_enable_message"
+    systemctl enable apache2
+    sleep 2
+fi
+
 # Reinicia el Apache / Apache restart
 apache_restart_message=$(get_language_message "\e[96mRestarting Apache...\e[0m" "\e[96mReiniciando Apache...\e[0m")
 echo -e "$apache_restart_message"
+systemctl enable apache2
 systemctl restart apache2
 sleep 2
 
