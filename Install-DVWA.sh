@@ -149,30 +149,30 @@ if [ -d "/var/www/html/DVWA" ]; then
     echo -e "$warning_message"
 
     # Preguntar al usuario qué acción tomar / Ask the user what action to take
-    read -p "$(get_language_message "\e[96mDo you want to delete the existing folder and download it again (y/n):\e[0m " "es" "\e[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n):\e[0m ")" user_response
+    read -p "$(get_language_message "\e[96mDo you want to delete the existing folder and download it again (y/n):\e[0m " "\e[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n):\e[0m ")" user_response
 
     if [[ "$user_response" == "s" || "$user_response" == "y" ]]; then
         # Borrar la carpeta existente / Delete existing folder
         rm -rf /var/www/html/DVWA
 
         # Descargar DVWA desde GitHub / Download DVWA from GitHub
-        download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "es" "\e[96mDescargando DVWA desde GitHub...\e[0m")
+        download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "\e[96mDescargando DVWA desde GitHub...\e[0m")
         echo -e "$download_message"
         git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
         sleep 2
     elif [ "$user_response" == "n" ]; then
         # El usuario elige no descargar / User chooses not to download
-        no_download_message=$(get_language_message "\e[96mContinuing without downloading DVWA.\e[0m" "es" "\e[96mContinuando sin descargar DVWA.\e[0m")
+        no_download_message=$(get_language_message "\e[96mContinuing without downloading DVWA.\e[0m" "\e[96mContinuando sin descargar DVWA.\e[0m")
         echo -e "$no_download_message"
     else
         # Respuesta inválida / Invalid answer
-        invalid_message=$(get_language_message "\e[91mError! Invalid response. Exiting the script.\e[0m" "es" "\e[91m¡Error! Respuesta no válida. Saliendo del script.\e[0m")
+        invalid_message=$(get_language_message "\e[91mError! Invalid response. Exiting the script.\e[0m" "\e[91m¡Error! Respuesta no válida. Saliendo del script.\e[0m")
         echo -e "$invalid_message"
         exit 1
     fi
 else
     # La carpeta no existe, descargar DVWA desde GitHub / Folder does not exist, download DVWA from GitHub
-    download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "es" "\e[96mDescargando DVWA desde GitHub...\e[0m")
+    download_message=$(get_language_message "\e[96mDownloading DVWA from GitHub...\e[0m" "\e[96mDescargando DVWA desde GitHub...\e[0m")
     echo -e "$download_message"
     git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
     sleep 2
