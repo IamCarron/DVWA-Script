@@ -244,15 +244,15 @@ else
     # Habilita Apache / Habilita Apache
     apache_enable_message=$(get_language_message "\e[96mEnabling Apache...\e[0m" "\e[96mHabilitando Apache...\e[0m")
     echo -e "$apache_enable_message"
-    systemctl enable apache2
+    systemctl enable apache2 >/dev/null 2>&1
     sleep 2
 fi
 
 # Reinicia el Apache / Apache restart
 apache_restart_message=$(get_language_message "\e[96mRestarting Apache...\e[0m" "\e[96mReiniciando Apache...\e[0m")
 echo -e "$apache_restart_message"
-systemctl enable apache2
-systemctl restart apache2
+systemctl enable apache2 >/dev/null 2>&1
+systemctl restart apache2 >/dev/null 2>&1
 sleep 2
 
 success_message=$(get_language_message "\e[92mDVWA has been installed successfully. Access \e[93mhttp://localhost/DVWA\e[0m \e[92mto get started." "\e[92mDVWA se ha instalado correctamente. Accede a \e[93mhttp://localhost/DVWA\e[0m \e[92mpara comenzar.")
