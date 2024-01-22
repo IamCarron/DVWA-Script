@@ -166,7 +166,7 @@ if [ -d "/var/www/html/DVWA" ]; then
         echo -e "$no_download_message"
     else
         # Respuesta inválida / Invalid answer
-        invalid_message=$(et_language_message "\e[91mError! Invalid response. Exiting the script.\e[0m" "\e[91m¡Error! Respuesta no válida. Saliendo del script.\e[0m")
+        invalid_message=$(get_language_message "\e[91mError! Invalid response. Exiting the script.\e[0m" "\e[91m¡Error! Respuesta no válida. Saliendo del script.\e[0m")
         echo -e "$invalid_message"
         exit 1
     fi
@@ -237,22 +237,22 @@ fi
 sleep 2
 
 # Verificar si Apache ya está habilitado / Check if Apache is already enabled
-if systemctl is-enabled apache2 >/dev/null 2>&1; then
+if systemctl is-enabled apache2 &>/dev/null; then
     apache_already_enabled_message=$(get_language_message "\033[92mApache service is already enabled.\033[0m" "\033[92mEl servicio Apache ya está en habilitado.\033[0m")
     echo -e "$apache_already_enabled_message"
 else
     # Habilita Apache / Habilita Apache
     apache_enable_message=$(get_language_message "\e[96mEnabling Apache...\e[0m" "\e[96mHabilitando Apache...\e[0m")
     echo -e "$apache_enable_message"
-    systemctl enable apache2 >/dev/null 2>&1
+    systemctl enable apache2 &>/dev/null
     sleep 2
 fi
 
 # Reinicia el Apache / Apache restart
 apache_restart_message=$(get_language_message "\e[96mRestarting Apache...\e[0m" "\e[96mReiniciando Apache...\e[0m")
 echo -e "$apache_restart_message"
-systemctl enable apache2 >/dev/null 2>&1
-systemctl restart apache2 >/dev/null 2>&1
+systemctl enable apache2 &>/dev/null
+systemctl restart apache2 &>/dev/null
 sleep 2
 
 success_message=$(get_language_message "\e[92mDVWA has been installed successfully. Access \e[93mhttp://localhost/DVWA\e[0m \e[92mto get started." "\e[92mDVWA se ha instalado correctamente. Accede a \e[93mhttp://localhost/DVWA\e[0m \e[92mpara comenzar.")
