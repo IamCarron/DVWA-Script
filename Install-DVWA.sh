@@ -68,7 +68,7 @@ run_mysql_commands() {
         echo
         # Verificar si las credenciales son válidas antes de ejecutar comandos MySQL / Verify if credentials are valid before executing MySQL commands
         if ! mysql -u "$mysql_user" -p"$mysql_password" -e ";" &>/dev/null; then
-            echo -e "\n$(get_language_message "\e[91mError: Invalid MySQL credentials. Please check your username and password.\e[0m" "\e[91mError: Credenciales MySQL inválidas. Por favor, compruebe su nombre de usuario y contraseña.")"
+            echo -e "\n$(get_language_message "\e[91mError: Invalid MySQL credentials. Please check your username and password. If you are traying to use root user and blank password make sure that you are running the script as root user.\e[0m" "\e[91mError: Credenciales MySQL inválidas. Por favor, compruebe su nombre de usuario y contraseña. Si usted estas intentando de utilizar el usuario root y la contraseña en blanco asegúrate de que estas ejecutando el script como usuario root.")"
         else
             break
         fi
