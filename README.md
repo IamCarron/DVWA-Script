@@ -70,6 +70,10 @@ This script automates the installation process for [DVWA (Damn Vulnerable Web Ap
    ```bash
    sudo ./Install-DVWA.sh
    ```
+**If you are willing to use root and empty password for the execution of MySQL commands the script must be run as root user**
+
+**Si vas a usar el usuario root y la contraseña vacia para ejecutar el script tienes que hacerlo como usuario root.**
+
 
 ---
 
