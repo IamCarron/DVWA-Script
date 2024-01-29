@@ -35,10 +35,6 @@ echo -e "\033[96m\033[1m
   ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
   ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝     
 \033[0m"
-
-welcome_message=$(get_language_message "\033[96mWelcome to the DVWA setup!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
-echo -e "$welcome_message"
-echo
 echo -e "\033[92m============================================================="
 echo -e "\n$(get_language_message "\033[92mScript Name: Install-DVWA.sh\033[0m" "\033[92mNombre del Script: Install-DVWA.sh\033[0m")"
 echo -e "\n$(get_language_message "\033[92mAuthor: IamCarron\033[0m" "\033[92mAutor: IamCarron\033[0m")"
@@ -46,6 +42,8 @@ echo -e "\n$(get_language_message "\033[92mGithub Repository: https://github.com
 echo -e "\n$(get_language_message "\033[92mInstaller Version: 1.0.2\033[0m" "\033[92mVersión del instalador: 1.0.2\033[0m")"
 echo -e "\033[92m============================================================="
 echo
+welcome_message=$(get_language_message "\033[96mWelcome to the DVWA setup!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
+echo -e "$welcome_message"
 # Función para verificar la existencia de un programa / Function to verify the existence of a program
 check_program() {
     if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
@@ -70,7 +68,7 @@ run_sql_commands() {
         read -s -p "$(get_language_message "\e[96mEnter SQL password (press Enter for no password):\e[96m " "\e[96mIngrese la contraseña de SQL (presiona Enter si no hay contraseña):\e[0m ")" sql_password
         echo
         # Verificar si las credenciales son válidas antes de ejecutar comandos SQL / Verify if credentials are valid before executing SQL commands
-        if ! sql -u "$sql_user" -p"$sql_password" -e ";" &>/dev/null; then
+        if ! mysql -u "$sql_user" -p"$sql_password" -e ";" &>/dev/null; then
             echo -e "\n$(get_language_message "\e[91mError: Invalid SQL credentials. Please check your username and password. If you are traying to use root user and blank password make sure that you are running the script as root user.\e[0m" "\e[91mError: Credenciales SQL inválidas. Por favor, compruebe su nombre de usuario y contraseña. Si usted estas intentando de utilizar el usuario root y la contraseña en blanco asegúrate de que estas ejecutando el script como usuario root.")"
         else
             break
@@ -96,7 +94,7 @@ run_sql_commands() {
 sql_commands() {
     local sql_user="$1"
     local sql_password="$2"
-    local sql_command="sql -u$sql_user"
+    local sql_command="mysql -u$sql_user"
 
     if [ -n "$sql_password" ]; then
         sql_command+=" -p$sql_password"
