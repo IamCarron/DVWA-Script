@@ -48,7 +48,7 @@ echo -e "\033[96m\033[1m
 \033[0m"
 echo
 echo -e "\033[92m╓────────────────────────────────────────────────────────────╖"
-center_text "$(get_language_message "\033[96mWelcome to the DVWA setup!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")" "$line_length"
+center_text "$(get_language_message "Welcome to the DVWA setup!" "¡Bienvenido al instalador de DVWA!")" "$line_length"
 center_text "$(get_language_message "Script Name: Install-DVWA.sh " "Nombre del Script: Install-DVWA.sh ")" "$line_length"
 center_text "$(get_language_message "Author: IamCarron " "Autor: IamCarron ")" "$line_length"
 center_text "$(get_language_message "Github Repo: https://github.com/IamCarron/DVWA-Script" "GitHub Repo: https://github.com/IamCarron/DVWA-Script")" "$line_length"
