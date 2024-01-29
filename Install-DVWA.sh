@@ -28,6 +28,8 @@ center_text() {
     
     printf "%s%-${padding_before}s%s%-*s%s\n" "║" " " "$text" "$padding_after" " " "║"
 }
+# Longitud deseada para la línea / Desired line length
+line_length=60
 # Arte ASCII / ASCII Art
 echo -e "\033[96m\033[1m
                   ██████╗ ██╗   ██╗██╗    ██╗ █████╗                    
@@ -44,19 +46,14 @@ echo -e "\033[96m\033[1m
   ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
   ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝     
 \033[0m"
-
-# Longitud deseada para la línea / Desired line length
-line_length=60
-
+echo
 echo -e "\033[92m╓────────────────────────────────────────────────────────────╖"
+center_text "$(get_language_message "\033[96mWelcome to the DVWA setup!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")" "$line_length"
 center_text "$(get_language_message "Script Name: Install-DVWA.sh " "Nombre del Script: Install-DVWA.sh ")" "$line_length"
 center_text "$(get_language_message "Author: IamCarron " "Autor: IamCarron ")" "$line_length"
 center_text "$(get_language_message "Github Repo: https://github.com/IamCarron/DVWA-Script" "GitHub Repo: https://github.com/IamCarron/DVWA-Script")" "$line_length"
-center_text "$(get_language_message "Installer Version: 1.0.2 " "Versión del Instalador: 1.0.4 ")" "$line_length"
+center_text "$(get_language_message "Installer Version: 1.0.4 " "Versión del Instalador: 1.0.4 ")" "$line_length"
 echo -e "╙────────────────────────────────────────────────────────────╜\033[0m"
-
-welcome_message=$(get_language_message "\033[96mWelcome to the DVWA setup!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
-echo -e "$welcome_message"
 echo
 # Función para verificar la existencia de un programa / Function to verify the existence of a program
 check_program() {
