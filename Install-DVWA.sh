@@ -35,12 +35,12 @@ echo -e "\033[96m\033[1m
   ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
   ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝     
 \033[0m"
-echo -e "\033[92m============================================================="
-echo -e "\n$(get_language_message "\033[92mScript Name: Install-DVWA.sh\033[0m" "\033[92mNombre del Script: Install-DVWA.sh\033[0m")"
-echo -e "\n$(get_language_message "\033[92mAuthor: IamCarron\033[0m" "\033[92mAutor: IamCarron\033[0m")"
-echo -e "\n$(get_language_message "\033[92mGithub Repository: https://github.com/IamCarron/DVWA-Script\033[0m" "\033[92mRepositorio de Github: https://github.com/IamCarron/DVWA-Script\033[0m")"
-echo -e "\n$(get_language_message "\033[92mInstaller Version: 1.0.2\033[0m" "\033[92mVersión del instalador: 1.0.2\033[0m")"
-echo -e "\033[92m============================================================="
+echo -e "\033[92m═════════════════════════════════════════════════════════"
+echo -e "$(get_language_message "\033[92m║ Script Name:\033[0m Install-DVWA.sh" "\033[92m║ Nombre del Script:\033[0m Install-DVWA.sh")"
+echo -e "$(get_language_message "\033[92m║ Author:\033[0m IamCarron" "\033[92m║ Autor:\033[0m IamCarron")"
+echo -e "$(get_language_message "\033[92m║ Github Repository:\033[0m https://github.com/IamCarron/DVWA-Script" "\033[92m║ Repositorio de Github:\033[0m https://github.com/IamCarron/DVWA-Script")"
+echo -e "$(get_language_message "\033[92m║ Installer Version:\033[0m 1.0.2" "\033[92m║ Versión del instalador:\033[0m 1.0.2")"
+echo -e "\033[92m═════════════════════════════════════════════════════════\033[0m"
 echo
 welcome_message=$(get_language_message "\033[96mWelcome to the DVWA setup!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
 echo -e "$welcome_message"
