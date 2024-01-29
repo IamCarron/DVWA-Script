@@ -177,16 +177,27 @@ else
     git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
     sleep 2
 fi
-
-# Verificar si MySQL ya está iniciado / Check if MySQL is already started
-if systemctl is-active --quiet mysql.service; then
-    mysql_already_started_message=$(get_language_message "\033[92mMySQL service is already running.\033[0m" "\033[92mEl servicio MySQL ya está en ejecución.\033[0m")
-    echo -e "$mysql_already_started_message"
+# Verificar si MariaDB ya está habilitado / Check if MariaDB is already enabled
+if systemctl is-enabled mariadb.service &>/dev/null; then
+    mariadb_already_enabled_message=$(get_language_message "\033[92mMariaDB service is already enabled.\033[0m" "\033[92mEl servicio MariaDB ya está en habilitado.\033[0m")
+    echo -e "$mariadb_already_enabled_message"
 else
-    # Iniciar MySQL / Start MySQL
-    mysql_start_message=$(get_language_message "\e[96mStarting MySQL...\e[0m" "\e[96mIniciando MySQL...\e[0m")
-    echo -e "$mysql_start_message"
-    systemctl start mysql.service
+    # Habilita Apache / Habilita Apache
+    mariadb_enable_message=$(get_language_message "\e[96mEnabling MariaDB...\e[0m" "\e[96mHabilitando MariaDB...\e[0m")
+    echo -e "$mariadb_enable_message"
+    systemctl enable mariadb.service &>/dev/null
+    sleep 2
+fi
+
+# Verificar si MariaDB ya está iniciado / Check if MariaDB is already started
+if systemctl is-active --quiet mariadb.service; then
+    mariadb_already_started_message=$(get_language_message "\033[92mMariaDB service is already running.\033[0m" "\033[92mEl servicio MariaDB ya está en ejecución.\033[0m")
+    echo -e "$mariadb_already_started_message"
+else
+    # Iniciar MariaDB / Start MariaDB
+    mariadb_start_message=$(get_language_message "\e[96mStarting MariaDB...\e[0m" "\e[96mIniciando MariaDB...\e[0m")
+    echo -e "$mariadb_start_message"
+    systemctl start mariadb.service
     sleep 2
 fi
 
