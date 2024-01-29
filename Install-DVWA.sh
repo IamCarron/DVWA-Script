@@ -44,6 +44,7 @@ echo -e "\033[92m============================================================="
 echo
 welcome_message=$(get_language_message "\033[96mWelcome to the DVWA setup!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
 echo -e "$welcome_message"
+echo
 # Función para verificar la existencia de un programa / Function to verify the existence of a program
 check_program() {
     if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
