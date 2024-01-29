@@ -38,10 +38,12 @@ echo -e "\033[96m\033[1m
 
 welcome_message=$(get_language_message "\033[96mWelcome to the DVWA setup!\033[0m" "\033[96m¡Bienvenido al instalador de DVWA!\033[0m")
 echo -e "$welcome_message"
+echo -e"\033[92===========================================================================================================================================================================================================[0m"
 echo -e "\n$(get_language_message "\033[92mScript Name: Install-DVWA.sh\033[0m" "\033[92mNombre del Script: Install-DVWA.sh\033[0m")"
 echo -e "\n$(get_language_message "\033[92mAuthor: IamCarron\033[0m" "\033[92mAutor: IamCarron\033[0m")"
 echo -e "\n$(get_language_message "\033[92mGithub Repository: https://github.com/IamCarron/DVWA-Script\033[0m" "\033[92mRepositorio de Github: https://github.com/IamCarron/DVWA-Script\033[0m")"
 echo -e "\n$(get_language_message "\033[92mInstaller Version: 1.0.2\033[0m" "\033[92mVersión del instalador: 1.0.2\033[0m")"
+echo -e"\033[92===========================================================================================================================================================================================================[0m"
 echo
 # Función para verificar la existencia de un programa / Function to verify the existence of a program
 check_program() {
@@ -55,20 +57,20 @@ check_program() {
     fi
 }
 
-run_mysql_commands() {
-    local mysql_user
-    local mysql_password
+run_sql_commands() {
+    local sql_user
+    local sql_password
 
     while true; do
         echo -e "\n$(get_language_message "\e[96mDefault credentials:\e[0m" "\e[96mCredenciales por defecto:\e[0m")"
         echo -e "Username: \033[93mroot\033[0m"
         echo -e "\n$(get_language_message "Password: \033[93m[No password just hit Enter]\033[0m" "Password: \033[93m[Sin contraseña solo presiona Enter.]\033[0m")"
-        read -p "$(get_language_message "\e[96mEnter MySQL user:\e[0m " "\e[96mIngrese el usuario de MySQL:\e[0m ")" mysql_user
-        read -s -p "$(get_language_message "\e[96mEnter MySQL password (press Enter for no password):\e[96m " "\e[96mIngrese la contraseña de MySQL (presiona Enter si no hay contraseña):\e[0m ")" mysql_password
+        read -p "$(get_language_message "\e[96mEnter SQL user:\e[0m " "\e[96mIngrese el usuario de SQL:\e[0m ")" sql_user
+        read -s -p "$(get_language_message "\e[96mEnter SQL password (press Enter for no password):\e[96m " "\e[96mIngrese la contraseña de SQL (presiona Enter si no hay contraseña):\e[0m ")" sql_password
         echo
-        # Verificar si las credenciales son válidas antes de ejecutar comandos MySQL / Verify if credentials are valid before executing MySQL commands
-        if ! mysql -u "$mysql_user" -p"$mysql_password" -e ";" &>/dev/null; then
-            echo -e "\n$(get_language_message "\e[91mError: Invalid MySQL credentials. Please check your username and password. If you are traying to use root user and blank password make sure that you are running the script as root user.\e[0m" "\e[91mError: Credenciales MySQL inválidas. Por favor, compruebe su nombre de usuario y contraseña. Si usted estas intentando de utilizar el usuario root y la contraseña en blanco asegúrate de que estas ejecutando el script como usuario root.")"
+        # Verificar si las credenciales son válidas antes de ejecutar comandos SQL / Verify if credentials are valid before executing SQL commands
+        if ! sql -u "$sql_user" -p"$sql_password" -e ";" &>/dev/null; then
+            echo -e "\n$(get_language_message "\e[91mError: Invalid SQL credentials. Please check your username and password. If you are traying to use root user and blank password make sure that you are running the script as root user.\e[0m" "\e[91mError: Credenciales SQL inválidas. Por favor, compruebe su nombre de usuario y contraseña. Si usted estas intentando de utilizar el usuario root y la contraseña en blanco asegúrate de que estas ejecutando el script como usuario root.")"
         else
             break
         fi
@@ -76,11 +78,11 @@ run_mysql_commands() {
 
     local success=false
     while [ "$success" != true ]; do
-        # Ejecutar comandos MySQL / Execute MySQL commands
-        mysql_commands_output=$(mysql_commands "$mysql_user" "$mysql_password")
+        # Ejecutar comandos SQL / Execute SQL commands
+        sql_commands_output=$(sql_commands "$sql_user" "$sql_password")
 
         if [ $? -eq 0 ]; then
-            echo -e "$(get_language_message "\033[92mMySQL commands executed successfully.\033[0m" "\033[92mComandos MySQL ejecutados con éxito.\033[0m")"
+            echo -e "$(get_language_message "\033[92mSQL commands executed successfully.\033[0m" "\033[92mComandos SQL ejecutados con éxito.\033[0m")"
             success=true
         else
             if [ "$recreate_choice" != "no" ]; then
@@ -90,29 +92,29 @@ run_mysql_commands() {
     done
 }
 
-mysql_commands() {
-    local mysql_user="$1"
-    local mysql_password="$2"
-    local mysql_command="mysql -u$mysql_user"
+sql_commands() {
+    local sql_user="$1"
+    local sql_password="$2"
+    local sql_command="sql -u$sql_user"
 
-    if [ -n "$mysql_password" ]; then
-        mysql_command+=" -p$mysql_password"
+    if [ -n "$sql_password" ]; then
+        sql_command+=" -p$sql_password"
     fi
 
     # Verificar si la base de datos ya existe
-    if ! $mysql_command -e "CREATE DATABASE IF NOT EXISTS dvwa;"; then
+    if ! $sql_command -e "CREATE DATABASE IF NOT EXISTS dvwa;"; then
         echo -e "$(get_language_message "\033[91mAn error occurred while creating the DVWA database." "\033[91mSe ha producido un error al crear la base de datos DVWA.")"
         return 1
     fi
 
     # Verificar si el usuario ya existe
-    if ! $mysql_command -e "CREATE USER IF NOT EXISTS 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';"; then
+    if ! $sql_command -e "CREATE USER IF NOT EXISTS 'dvwa'@'localhost' IDENTIFIED BY 'p@ssw0rd';"; then
         echo -e "$(get_language_message "\033[91mAn error occurred while creating the DVWA user." "\033[91mSe ha producido un error al crear el usuario DVWA.")"
         return 1
     fi
 
     # Asignar privilegios al usuario
-    if ! $mysql_command -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost'; FLUSH PRIVILEGES;"; then
+    if ! $sql_command -e "GRANT ALL PRIVILEGES ON dvwa.* TO 'dvwa'@'localhost'; FLUSH PRIVILEGES;"; then
         echo -e "$(get_language_message "\033[91mAn error occurred while granting privileges." "\033[91mSe ha producido un error al otorgar privilegios.")"
         return 1
     fi
@@ -202,7 +204,7 @@ else
 fi
 
 # Llama a la función / Call the function
-run_mysql_commands
+run_sql_commands
 sleep 2
 
 # Copia de la carpeta DVWA a /var/www/html / Coping DVWA folder to /var/www/html
