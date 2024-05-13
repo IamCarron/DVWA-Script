@@ -76,6 +76,7 @@ run_sql_commands() {
         echo -e "Username: \033[93mroot\033[0m"
         echo -e "\n$(get_language_message "Password: \033[93m[No password just hit Enter]\033[0m" "Password: \033[93m[Sin contraseña solo presiona Enter.]\033[0m")"
         read -p "$(get_language_message "\e[96mEnter SQL user:\e[0m " "\e[96mIngrese el usuario de SQL:\e[0m ")" sql_user
+        # Se configura el usuario root como usuario por defecto para facilitar las instalaciones desatendidas.
         sql_user=${sql_user:-root}
         read -s -p "$(get_language_message "\e[96mEnter SQL password (press Enter for no password):\e[96m " "\e[96mIngrese la contraseña de SQL (presiona Enter si no hay contraseña):\e[0m ")" sql_password
         echo
