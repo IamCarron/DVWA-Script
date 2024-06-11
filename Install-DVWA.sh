@@ -5,11 +5,14 @@ lang_prefix="${LANG:0:2}"
 
 # Función para verificar el idioma y mostrar el mensaje correspondiente / Function for verifying the language and displaying the corresponding message
 get_language_message() {
-    if [[ $lang_prefix -eq "es" ]]; then
-        echo -e "$1"
-    else
-        echo -e "$2"
-    fi
+    case $lang_prefix in
+        "es")
+            echo -e "$1"
+            ;;
+        *)
+            echo -e "$2"
+            ;;
+    esac
 }
 
 # Comprueba si el usuario es root / Check if the user is root
