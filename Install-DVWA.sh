@@ -1,18 +1,19 @@
 #!/bin/bash
 
 # Obtener prefijo de idioma / Get language prefix
-lang_prefix="${LANG:0:2}"
+if [ -z "$LC_MESSAGES" ]; then
+    lang_prefix="en"
+else
+    lang_prefix="${LC_MESSAGES:0:2}"
+fi
 
 # Función para verificar el idioma y mostrar el mensaje correspondiente / Function for verifying the language and displaying the corresponding message
 get_language_message() {
-    case $lang_prefix in
-        "es")
-            echo -e "$1"
-            ;;
-        *)
-            echo -e "$2"
-            ;;
-    esac
+    if [[ $lang_prefix == "es" ]]; then
+        echo -e "$2"
+    else
+        echo -e "$1"
+    fi
 }
 
 # Comprueba si el usuario es root / Check if the user is root
@@ -55,7 +56,7 @@ center_text "$(get_language_message "Welcome to the DVWA setup!" "¡Bienvenido a
 center_text "$(get_language_message "Script Name: Install-DVWA.sh " "Nombre del Script: Install-DVWA.sh ")" "$line_length"
 center_text "$(get_language_message "Author: IamCarron " "Autor: IamCarron ")" "$line_length"
 center_text "$(get_language_message "Github Repo: https://github.com/IamCarron/DVWA-Script" "GitHub Repo: https://github.com/IamCarron/DVWA-Script")" "$line_length"
-center_text "$(get_language_message "Installer Version: 1.0.4 " "Versión del Instalador: 1.0.4 ")" "$line_length"
+center_text "$(get_language_message "Installer Version: 1.0.5 " "Versión del Instalador: 1.0.5 ")" "$line_length"
 echo -e "╙────────────────────────────────────────────────────────────╜\033[0m"
 echo
 # Función para verificar la existencia de un programa / Function to verify the existence of a program
