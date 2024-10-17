@@ -270,7 +270,7 @@ if systemctl is-enabled apache2 &>/dev/null; then
     apache_already_enabled_message=$(get_language_message "\033[92mApache service is already enabled.\033[0m" "\033[92mEl servicio Apache ya está en habilitado.\033[0m")
     echo -e "$apache_already_enabled_message"
 else
-    # Habilita Apache / Habilita Apache
+    # Habilita Apache / Enable Apache
     apache_enable_message=$(get_language_message "\e[96mEnabling Apache...\e[0m" "\e[96mHabilitando Apache...\e[0m")
     echo -e "$apache_enable_message"
     systemctl enable apache2 &>/dev/null
