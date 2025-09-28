@@ -12,8 +12,11 @@ declare -A en_strings
 declare -A es_strings
 declare -A fr_strings
 
+batch_mode=${batch_mode:-""}
+
 # English translations
 en_strings=(
+    ["error_missing_input"]="\033[91mMissing input %s.\033[0m"
     ["error_not_root"]="\033[91mThis script must be run by the root user.\033[0m"
     ["welcome_message"]="Welcome to the DVWA setup!"
     ["script_name"]="Script Name: Install-DVWA.sh "
@@ -165,6 +168,12 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+if [[ -n "$batch_mode" ]]; then
+    [[ ! -v "sql_user" ]] && echo -e "$(printf "$(get_translation "error_missing_input" "$lang")" "sql_user")" && exit 1
+    [[ ! -v "sql_password" ]] && echo -e "$(printf "$(get_translation "error_missing_input" "$lang")" "sql_password")" && exit 1
+    [[ ! -v "force_download" ]] && echo -e "$(printf "$(get_translation "error_missing_input" "$lang")" "force_download")" && exit 1
+fi
+
 # Function for centering text on a line of specified length
 center_text() {
     local text="$1"
@@ -218,19 +227,21 @@ check_program() {
 }
 
 run_sql_commands() {
-    local sql_user
-    local sql_password
+    # local sql_user
+    # local sql_password
 
     while true; do
         echo -e "\n$(get_translation "default_credentials" "$lang")"
         echo -e "Username: \033[93mroot\033[0m"
-        echo -e "\n$(get_translation "password_prompt_info" "$lang")"
-        echo -e -n "$(get_translation "enter_sql_user" "$lang")"
-        read sql_user
-        # Set root as default user for unattended installations.
-        sql_user=${sql_user:-root}
-        echo -e -n "$(get_translation "enter_sql_password" "$lang")"
-        read -s sql_password
+        if [[ -z "$batch_mode" ]]; then
+            echo -e "\n$(get_translation "password_prompt_info" "$lang")"
+            echo -e -n "$(get_translation "enter_sql_user" "$lang")"
+            read sql_user
+            # Set root as default user for unattended installations.
+            sql_user=${sql_user:-root}
+            echo -e -n "$(get_translation "enter_sql_password" "$lang")"
+            read -s sql_password
+        fi
         echo
         # Verify if credentials are valid before executing SQL commands
         if ! mysql -u "$sql_user" -p"$sql_password" -e ";" &>/dev/null; then
@@ -312,10 +323,12 @@ if [ -d "/var/www/html/DVWA" ]; then
     echo -e "$(get_translation "dvwa_folder_exists" "$lang")"
 
     # Ask the user what action to take
-    echo -e -n "$(get_translation "prompt_delete_folder" "$lang")"
-    read user_response
+    if [[ -z "$batch_mode" ]]; then
+        echo -e -n "$(get_translation "prompt_delete_folder" "$lang")"
+        read force_download
+    fi
 
-    if [[ "$user_response" == "s" || "$user_response" == "y" || "$user_response" == "o" ]]; then  # Added "o" for French oui
+    if [[ "$force_download" == "s" || "$force_download" == "y" || "$force_download" == "o" ]]; then  # Added "o" for French oui
         # Delete existing folder
         rm -rf /var/www/html/DVWA
 
@@ -323,7 +336,7 @@ if [ -d "/var/www/html/DVWA" ]; then
         echo -e "$(get_translation "downloading_dvwa" "$lang")"
         git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
         sleep 2
-    elif [[ "$user_response" == "n" ]]; then
+    elif [[ "$force_download" == "n" ]]; then
         # User chooses not to download
         echo -e "$(get_translation "continuing_without_download" "$lang")"
     else
