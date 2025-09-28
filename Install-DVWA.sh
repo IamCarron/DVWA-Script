@@ -217,12 +217,10 @@ echo
 # Function to verify the existence of a program
 check_program() {
     if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
-        message="$(get_translation "package_not_installed" "$lang")"
-        echo -e "$(printf "$message" "$1")"
+        echo -e "$(printf "$(get_translation "package_not_installed" "$lang")" "$1")"
         apt install -y "$1"
     else
-        success_message="$(get_translation "package_installed" "$lang")"
-        echo -e "$(printf "$success_message" "$1")"
+        echo -e "$(printf "$(get_translation "package_installed" "$lang")" "$1")"
     fi
 }
 
@@ -244,7 +242,11 @@ run_sql_commands() {
         fi
         echo
         # Verify if credentials are valid before executing SQL commands
-        if ! mysql -u "$sql_user" -p"$sql_password" -e ";" &>/dev/null; then
+        local mysql_cmd="mysql -u$sql_user"
+        if [[ -n "$sql_password" ]]; then
+            mysql_cmd+=" -p$sql_password"
+        fi
+        if ! $mysql_cmd -e ";" &>/dev/null; then
             echo -e "\n$(get_translation "invalid_sql_credentials" "$lang")"
         else
             break
@@ -272,7 +274,7 @@ sql_commands() {
     local sql_password="$2"
     local sql_command="mysql -u$sql_user"
 
-    if [ -n "$sql_password" ]; then
+    if [[ -n "$sql_password" ]]; then
         sql_command+=" -p$sql_password"
     fi
 
