@@ -24,8 +24,8 @@ en_strings=(
     ["package_installed"]="\033[92m%s is installed!\033[0m"
     ["default_credentials"]="\033[96mDefault credentials:\033[0m"
     ["password_prompt_info"]="Password: \033[93m[No password just hit Enter]\033[0m"
-    ["enter_sql_user"]="\033[96mEnter SQL user:\033[0m "
-    ["enter_sql_password"]="\033[96mEnter SQL password (press Enter for no password):\033[0m "
+    ["enter_sql_user"]="\033[96mEnter SQL user:\033[0m"
+    ["enter_sql_password"]="\033[96mEnter SQL password (press Enter for no password):\033[0m"
     ["invalid_sql_credentials"]="\033[91mError: Invalid SQL credentials. Please check your username and password. If you are trying to use root user and blank password make sure that you are running the script as root user.\033[0m"
     ["sql_success"]="\033[92mSQL commands executed successfully.\033[0m"
     ["error_create_db"]="\033[91mAn error occurred while creating the DVWA database.\033[0m"
@@ -34,7 +34,7 @@ en_strings=(
     ["updating_repos"]="\033[96mUpdating repositories...\033[0m"
     ["verifying_dependencies"]="\033[96mVerifying and installing necessary dependencies...\033[0m"
     ["dvwa_folder_exists"]="\033[91mAttention! The DVWA folder is already created.\033[0m"
-    ["prompt_delete_folder"]="\033[96mDo you want to delete the existing folder and download it again (y/n):\033[0m "
+    ["prompt_delete_folder"]="\033[96mDo you want to delete the existing folder and download it again (y/n):\033[0m"
     ["downloading_dvwa"]="\033[96mDownloading DVWA from GitHub...\033[0m"
     ["continuing_without_download"]="\033[96mContinuing without downloading DVWA.\033[0m"
     ["invalid_response"]="\033[91mError! Invalid response. Exiting the script.\033[0m"
@@ -51,7 +51,7 @@ en_strings=(
     ["restarting_apache"]="\033[96mRestarting Apache...\033[0m"
     ["installation_success"]="\033[92mDVWA has been installed successfully. Access \033[93mhttp://localhost/DVWA\033[0m \033[92mto get started.\033[0m"
     ["credentials"]="\033[92mCredentials:\033[0m"
-    ["final_signature"]="\033[95mWith ♡ by IamCarron"
+    ["final_signature"]="\033[95mWith ♡ by IamCarron\033[0m"
 )
 
 # Spanish translations
@@ -66,8 +66,8 @@ es_strings=(
     ["package_installed"]="\033[92m%s !Está instalado!\033[0m"
     ["default_credentials"]="\033[96mCredenciales por defecto:\033[0m"
     ["password_prompt_info"]="Password: \033[93m[Sin contraseña solo presiona Enter.]\033[0m"
-    ["enter_sql_user"]="\033[96mIngrese el usuario de SQL:\033[0m "
-    ["enter_sql_password"]="\033[96mIngrese la contraseña de SQL (presiona Enter si no hay contraseña):\033[0m "
+    ["enter_sql_user"]="\033[96mIngrese el usuario de SQL:\033[0m"
+    ["enter_sql_password"]="\033[96mIngrese la contraseña de SQL (presiona Enter si no hay contraseña):\033[0m"
     ["invalid_sql_credentials"]="\033[91mError: Credenciales SQL inválidas. Por favor, compruebe su nombre de usuario y contraseña. Si usted estas intentando de utilizar el usuario root y la contraseña en blanco asegúrate de que estas ejecutando el script como usuario root.\033[0m"
     ["sql_success"]="\033[92mComandos SQL ejecutados con éxito.\033[0m"
     ["error_create_db"]="\033[91mSe ha producido un error al crear la base de datos DVWA.\033[0m"
@@ -76,7 +76,7 @@ es_strings=(
     ["updating_repos"]="\033[96mActualizando repositorios...\033[0m"
     ["verifying_dependencies"]="\033[96mVerificando e instalando dependencias necesarias...\033[0m"
     ["dvwa_folder_exists"]="\033[91m¡Atención! La carpeta DVWA ya está creada.\033[0m"
-    ["prompt_delete_folder"]="\033[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n):\033[0m "
+    ["prompt_delete_folder"]="\033[96m¿Desea borrar la carpeta existente y descargarla de nuevo? (s/n):\033[0m"
     ["downloading_dvwa"]="\033[96mDescargando DVWA desde GitHub...\033[0m"
     ["continuing_without_download"]="\033[96mContinuando sin descargar DVWA.\033[0m"
     ["invalid_response"]="\033[91m¡Error! Respuesta no válida. Saliendo del script.\033[0m"
@@ -108,8 +108,8 @@ fr_strings=(
     ["package_installed"]="\033[92m%s est installé !\033[0m"
     ["default_credentials"]="\033[96mIdentifiants par défaut :\033[0m"
     ["password_prompt_info"]="Mot de passe : \033[93m[Pas de mot de passe, appuyez simplement sur Entrée]\033[0m"
-    ["enter_sql_user"]="\033[96mEntrez l'utilisateur SQL :\033[0m "
-    ["enter_sql_password"]="\033[96mEntrez le mot de passe SQL (appuyez sur Entrée pour aucun mot de passe) :\033[0m "
+    ["enter_sql_user"]="\033[96mEntrez l'utilisateur SQL :\033[0m"
+    ["enter_sql_password"]="\033[96mEntrez le mot de passe SQL (appuyez sur Entrée pour aucun mot de passe) :\033[0m"
     ["invalid_sql_credentials"]="\033[91mErreur : Identifiants SQL invalides. Veuillez vérifier votre nom d'utilisateur et votre mot de passe. Si vous essayez d'utiliser l'utilisateur root et un mot de passe vide, assurez-vous d'exécuter le script en tant qu'utilisateur root.\033[0m"
     ["sql_success"]="\033[92mCommandes SQL exécutées avec succès.\033[0m"
     ["error_create_db"]="\033[91mUne erreur s'est produite lors de la création de la base de données DVWA.\033[0m"
@@ -118,7 +118,7 @@ fr_strings=(
     ["updating_repos"]="\033[96mMise à jour des dépôts...\033[0m"
     ["verifying_dependencies"]="\033[96mVérification et installation des dépendances nécessaires...\033[0m"
     ["dvwa_folder_exists"]="\033[91mAttention ! Le dossier DVWA est déjà créé.\033[0m"
-    ["prompt_delete_folder"]="\033[96mVoulez-vous supprimer le dossier existant et le télécharger à nouveau (o/n) :\033[0m "
+    ["prompt_delete_folder"]="\033[96mVoulez-vous supprimer le dossier existant et le télécharger à nouveau (o/n) :\033[0m"
     ["downloading_dvwa"]="\033[96mTéléchargement de DVWA depuis GitHub...\033[0m"
     ["continuing_without_download"]="\033[96mContinuation sans télécharger DVWA.\033[0m"
     ["invalid_response"]="\033[91mErreur ! Réponse invalide. Sortie du script.\033[0m"
@@ -225,10 +225,12 @@ run_sql_commands() {
         echo -e "\n$(get_translation "default_credentials" "$lang")"
         echo -e "Username: \033[93mroot\033[0m"
         echo -e "\n$(get_translation "password_prompt_info" "$lang")"
-        read -p "$(get_translation "enter_sql_user" "$lang")" sql_user
+        echo -e -n "$(get_translation "enter_sql_user" "$lang")"
+        read sql_user
         # Set root as default user for unattended installations.
         sql_user=${sql_user:-root}
-        read -s -p "$(get_translation "enter_sql_password" "$lang")" sql_password
+        echo -e -n "$(get_translation "enter_sql_password" "$lang")"
+        read -s sql_password
         echo
         # Verify if credentials are valid before executing SQL commands
         if ! mysql -u "$sql_user" -p"$sql_password" -e ";" &>/dev/null; then
@@ -310,7 +312,8 @@ if [ -d "/var/www/html/DVWA" ]; then
     echo -e "$(get_translation "dvwa_folder_exists" "$lang")"
 
     # Ask the user what action to take
-    read -p "$(get_translation "prompt_delete_folder" "$lang")" user_response
+    echo -e -n "$(get_translation "prompt_delete_folder" "$lang")"
+    read user_response
 
     if [[ "$user_response" == "s" || "$user_response" == "y" || "$user_response" == "o" ]]; then  # Added "o" for French oui
         # Delete existing folder
