@@ -23,7 +23,7 @@ Este script automatiza el proceso de instalación de [DVWA (Damn Vulnerable Web 
 
 This script automates the installation process for [DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA), a web application intentionally designed to be vulnerable to various attacks. DVWA is a tool for learning and practicing web application security.
 
-## Description (Français) 📖
+## Description 📖
 
 Ce script automatise le processus d'installation de [DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA), une application web intentionnellement vulnérable à diverses attaques. DVWA est un outil pour apprendre et pratiquer la sécurité des applications web.
 
@@ -39,7 +39,7 @@ Ce script automatise le processus d'installation de [DVWA (Damn Vulnerable Web A
 - Automated installation of DVWA with necessary dependencies.
 - Supports both English and Spanish languages.
 
-## Fonctionnalités (Français) ✨
+## Fonctionnalités ✨
 
 - Installation automatisée de DVWA avec toutes les dépendances nécessaires.
 - Prise en charge de l’anglais, de l’espagnol et du français.
@@ -60,7 +60,7 @@ Ce script automatise le processus d'installation de [DVWA (Damn Vulnerable Web A
 
    ```
 
-1. Installation (Français) :
+1. Installation:
    ```bash
    sudo bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/IamCarron/DVWA-Script/main/Install-DVWA.sh)"
 
