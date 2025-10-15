@@ -336,7 +336,7 @@ if [ -d "/var/www/html/DVWA" ]; then
 
         # Download DVWA from GitHub
         echo -e "$(get_translation "downloading_dvwa" "$lang")"
-        git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
+        git clone --depth=1 https://github.com/digininja/DVWA.git /var/www/html/DVWA
         sleep 2
     elif [[ "$force_download" == "n" ]]; then
         # User chooses not to download
@@ -349,7 +349,7 @@ if [ -d "/var/www/html/DVWA" ]; then
 else
     # Folder does not exist, download DVWA from GitHub
     echo -e "$(get_translation "downloading_dvwa" "$lang")"
-    git clone https://github.com/digininja/DVWA.git /var/www/html/DVWA
+    git clone --depth=1 https://github.com/digininja/DVWA.git /var/www/html/DVWA
     sleep 2
 fi
 
