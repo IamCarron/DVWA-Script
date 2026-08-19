@@ -1,126 +1,75 @@
-# DVWA Installer
+# DVWA Installer 🚀
 
 ![DVWA Logo](https://raw.githubusercontent.com/ethicalhack3r/DVWA/master/dvwa/images/logo.png)
 
-## Table of Contents 📚
-- [Description](#description)
-- [Features](#features)
-- [Installation](#installation)
-  - [Installation Steps](#installation-steps)
-- [Usage](#usage)
-- [Credentials](#credentials)
-- [Language Support](#language-support)
-- [Contributing](#contributing)
-- [License](#license)
+[![Bash](https://img.shields.io/badge/Language-Bash-4EAA25.svg?logo=gnu-bash&logoColor=white)](https://www.gnu.org/software/bash/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/IamCarron/DVWA-Script/pulls)
+
+Automated, modern, and zero-touch installer for **[DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA)** on Debian and Ubuntu-based Linux distributions.
 
 ---
 
-## Descripción 📋
+## 🌟 Features / Características / Fonctionnalités
 
-Este script automatiza el proceso de instalación de [DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA), una aplicación web diseñada intencionalmente para ser vulnerable a varios ataques. DVWA es una herramienta para aprender y practicar seguridad de aplicaciones web.
-
-## Description 📖
-
-This script automates the installation process for [DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA), a web application intentionally designed to be vulnerable to various attacks. DVWA is a tool for learning and practicing web application security.
-
-## Description 📖
-
-Ce script automatise le processus d'installation de [DVWA (Damn Vulnerable Web Application)](https://github.com/digininja/DVWA), une application web intentionnellement vulnérable à diverses attaques. DVWA est un outil pour apprendre et pratiquer la sécurité des applications web.
+- ⚡ **Zero-Touch Setup:** Automatically installs all dependencies, configures Apache & MariaDB, fixes PHP directives, and initializes the DVWA database tables via `setup.php` without requiring manual browser interaction.
+- 🛡️ **PHP & PCRE JIT Compatibility:** Automatically tunes PHP directives (`allow_url_include`, `allow_url_fopen`, `display_errors`) and applies the `pcre.jit = 0` fix for modern PHP environments.
+- 🐳 **Universal Service Fallback:** Supports `systemd`, `service`, and `/etc/init.d/` — fully compatible with standard Linux servers, **Docker containers**, **WSL 1/2**, and minimal environments.
+- 🎨 **Cyberpunk / Neon UI:** 5-stage progress indicators (`[1/5]` to `[5/5]`), clear status badges (`[➜]`, `[✓]`, `[!]`, `[?]`), and an access summary card.
+- 🤖 **Batch / Headless Mode:** Supports automated, non-interactive execution via environment variables.
+- 🌐 **Multi-Language Support:** Full automatic detection for English, Español, and Français (`LC_ALL` / `LC_MESSAGES` / `LANG`).
 
 ---
 
-## Características ✨
+## 🛠️ Quick Installation / Instalación Rápida
 
-- Instalación automatizada de DVWA con las dependencias necesarias.
-- Soporte para los idiomas inglés y español.
+Run the one-liner command in your terminal as **root** / **sudo**:
 
-## Features ✨
+```bash
+sudo bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/IamCarron/DVWA-Script/main/Install-DVWA.sh)"
+```
 
-- Automated installation of DVWA with necessary dependencies.
-- Supports both English and Spanish languages.
-
-## Fonctionnalités ✨
-
-- Installation automatisée de DVWA avec toutes les dépendances nécessaires.
-- Prise en charge de l’anglais, de l’espagnol et du français.
+> **Note / Nota / Remarque:** If you intend to use the `root` user with an empty MySQL password, ensure you run the script directly as the `root` user.
 
 ---
 
-## Installation / Instalación / Installation 🛠️
+## 🤖 Non-Interactive / Batch Mode
 
-1. Installation:
-   ```bash
-   sudo bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/IamCarron/DVWA-Script/main/Install-DVWA.sh)"
+For CI/CD pipelines, Dockerfiles, or automated setups, you can pass parameters as environment variables:
 
-   ```
-
-1. Instalación:
-   ```bash
-   sudo bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/IamCarron/DVWA-Script/main/Install-DVWA.sh)"
-
-   ```
-
-1. Installation:
-   ```bash
-   sudo bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/IamCarron/DVWA-Script/main/Install-DVWA.sh)"
-
-   ```
-
-**If you are willing to use root and empty password for the execution of MySQL commands the script must be run as root user.**
-
-**Si vas a usar el usuario root y la contraseña vacia para ejecutar el script tienes que hacerlo como usuario root.**
-
-**Si vous souhaitez utiliser l'utilisateur root et un mot de passe vide pour l'exécution des commandes MySQL, le script doit être exécuté en tant qu'utilisateur root.**
+```bash
+sudo batch_mode=1 sql_user="root" sql_password="" force_download="y" bash -c "$(curl -fsSL https://raw.githubusercontent.com/IamCarron/DVWA-Script/main/Install-DVWA.sh)"
+```
 
 ---
 
-## Usage / Uso / Utilisation 🚀
+## 🔐 Credentials / Credenciales / Identifiants
 
-Follow the on-screen instructions to install DVWA. The script will guide you through the process, including updating repositories, installing dependencies, and configuring the DVWA database.
+Once the installation finishes, open your browser and navigate to `http://localhost/DVWA`:
 
-Sigue las instrucciones en pantalla para instalar DVWA. El script te guiará a través del proceso, incluyendo la actualización de repositorios, la instalación de dependencias y la configuración de la base de datos de DVWA.
-
-Suivez les instructions à l'écran pour installer DVWA. Le script vous guidera tout au long du processus, y compris la mise à jour des dépôts, l'installation des dépendances et la configuration de la base de données DVWA.
-
----
-
-## Credentials / Credenciales / Identifiants 🔐
-
-After install, use the following credentials:
-
-Después de la instalación, utiliza las siguientes credenciales:
-
-Après l'installation, utilisez les identifiants suivants :
-
-- **Username:** `admin`
-- **Password:** `password`
-  
----
-
-## Language Support / Soporte de Idiomas / Prise en charge des langues 🌐
-
-The script supports both English and Spanish languages. It automatically detects the system language and provides instructions accordingly.
-
-El script admite los idiomas inglés y español. Detecta automáticamente el idioma del sistema y proporciona instrucciones en consecuencia.
-
-Le script prend en charge l’anglais, l’espagnol et le français. Il détecte automatiquement la langue du système et affiche les instructions en conséquence.
+| Field / Campo | Value / Valor |
+| :--- | :--- |
+| **URL** | `http://localhost/DVWA` |
+| **Username / Usuario** | `admin` |
+| **Password / Contraseña** | `password` |
 
 ---
 
-## Contributing / Contribuciones / Contribuer 🤝
+## 🌐 Language Support / Idiomas
 
-Contributions are welcome! If you encounter any issues or have suggestions for improvement, please create a pull request or open an issue in the [GitHub repository](https://github.com/IamCarron/DVWA-Script).
-
-¡Las contribuciones son bienvenidas! Si encuentras algún problema o tienes sugerencias de mejora, por favor, crea una solicitud de extracción o abre un problema en el [repositorio de GitHub](https://github.com/IamCarron/DVWA-Script).
-
-Les contributions sont les bienvenues ! Si vous rencontrez des problèmes ou avez des suggestions d'amélioration, veuillez créer une pull request ou ouvrir un ticket dans le [dépôt GitHub](https://github.com/IamCarron/DVWA-Script).
+The script automatically detects your system locale:
+- 🇬🇧 **English** (`en`)
+- 🇪🇸 **Español** (`es`)
+- 🇫🇷 **Français** (`fr`)
 
 ---
 
-## License / Licencia / Licence 📄
+## 🤝 Contributing & License
 
-This project is licensed under the [MIT License](LICENSE).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/IamCarron/DVWA-Script/issues).
 
-Este proyecto está bajo la [Licencia MIT](LICENSE).
+Distributed under the **MIT License**. See `LICENSE` for more information.
 
-Ce projet est sous licence [MIT](LICENSE).
+<div align="center">
+  <sub>Made with ♥ by <a href="https://github.com/IamCarron">IamCarron</a></sub>
+</div>
