@@ -2,6 +2,7 @@
 
 ![DVWA Logo](https://raw.githubusercontent.com/ethicalhack3r/DVWA/master/dvwa/images/logo.png)
 
+[![CI](https://github.com/IamCarron/DVWA-Script/actions/workflows/ci.yml/badge.svg)](https://github.com/IamCarron/DVWA-Script/actions/workflows/ci.yml)
 [![Bash](https://img.shields.io/badge/Language-Bash-4EAA25.svg?logo=gnu-bash&logoColor=white)](https://www.gnu.org/software/bash/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/IamCarron/DVWA-Script/pulls)
